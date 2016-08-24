@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,10 @@ public class ReadConfig {
 		} else {
 			//开发环境
 			try {
-				file = new File(ReadConfig.class.getClassLoader().getResource(fileName).toURI());
+				URL url = ReadConfig.class.getClassLoader().getResource(fileName);
+				if(url==null)
+					throw new FileNotFoundException("文件["+fileName+"]:根据类加载方式找不到url对象(url对象为空)");
+				file = new File(url.toURI());
 				if(file.exists()){
 					logger.info("文件路劲[类加载器方式]:{}",file.getAbsoluteFile());					
 					return file;
