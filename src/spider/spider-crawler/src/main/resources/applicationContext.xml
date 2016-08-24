@@ -1,0 +1,1198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-4.1.xsd
+       http://www.springframework.org/schema/aop 
+       http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+       http://www.springframework.org/schema/mvc 
+       http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+	<!-- /**
+		 1、工商公示信息：:登记信息【基本信息，股东信息【股东出资详情】，变更信息】；
+		 				 备案信息【主要人员，分支机构，主管部门（出资人）信息，清算信息】；
+		 				 动产抵押登记信息；
+		 				 股权出质登记信息；
+		 				 行政处罚信息；
+		 				 经营异常信息；
+		 				 抽查信息；
+		 2、企业公示信息：股东及出资信息【股东及出资信息，变更信息】；股权变更信息；行政许可信息；知识产权出质登记信息；行政处罚信息
+		 */
+		/**
+	     暂时抓取的数据
+		 登记信息【基本信息，股东信息【股东出资详情】，变更信息】；
+		 备案信息【主要人员，分支机构】  
+		 */ -->
+<!-- 封装职责链入口类的springid，以便程序中自动获得 -->
+	<bean id="processClassNameManager" class="com.heetian.spider.component.ProcessClassName">
+		 <!-- 为处理器类配置省份标记,key为省份，value为首处理器类的id -->
+		<property name="processClassNames">
+			<map>
+				<!-- key为省份字段（与manager工程中的配置useProvince字段必须一直，否则出问题）、vlaue为home处理类的id -->
+				<entry key="100000" value="admisHomeProcess"></entry>
+				<entry key="340000" value="anhuiHomeProcess"></entry>
+				<entry key="500000" value="chongqingHomeProcess"></entry>
+				<entry key="350000" value="fujianHomeProcess"></entry>
+				<entry key="620000" value="gansuHomeProcess"></entry>
+				<entry key="440000" value="guangdongHomeProcess"></entry>
+				<entry key="450000" value="guangxiHomeProcess"></entry>
+				<entry key="520000" value="guizhouHomeProcess"></entry>  
+				<entry key="460000" value="hainanHomeProcess"></entry>
+				<entry key="130000" value="hebeiHomeProcess"></entry>
+				<entry key="230000" value="heilongjiangHomeProcess"></entry>
+				<entry key="410000" value="henanHomeProcess"></entry>
+				<entry key="420000" value="hubeiHomeProcess"></entry>
+				<entry key="430000" value="hunanHomeProcess"></entry>
+				<entry key="320000" value="jiangsuHomeProcess"></entry>
+				<entry key="360000" value="jiangxiHomeProcess"></entry>
+				<entry key="220000" value="jilinHomeProcess"></entry>
+				<entry key="210000" value="liaoningHomeProcess"></entry>
+				<entry key="150000" value="neimengguHomeProcess"></entry>
+				<entry key="640000" value="ningxiaHomeProcess"></entry>
+				<entry key="110000" value="beijingHomeProcess"></entry>
+				<entry key="630000" value="qinghaiHomeProcess"></entry>    
+				<entry key="370000" value="shandongHomeProcess"></entry>
+				<entry key="310000" value="shanghaiHomeProcess"></entry>
+				<entry key="140000" value="shanxidongHomeProcess"></entry>
+				<entry key="610000" value="shanxixiHomeProcess"></entry>
+				<entry key="510000" value="sichuanHomeProcess"></entry> 
+				<entry key="120000" value="tianjingHomeProcess"></entry>
+				<entry key="650000" value="xinjiangHomeProcess"></entry>
+				<entry key="540000" value="xizangHomeProcess"></entry>
+				<entry key="530000" value="yunnanHomeProcess"></entry>
+				<entry key="330000" value="zhejiangHomeProcess"></entry>
+			</map> 
+		</property>
+	</bean>
+<!-- 封装职责链入口类的springid，以便程序中自动获得 -->
+<!-- 北京页面解析类 -->
+	<!-- 解析每个省份home页面处理类，必须放置第一的位置， 每个处理类必须注入nextHandle（下一个处理类，用来将一个省份的所有处理类串起来，形成一条链条），uniqueWebUri（每个页面的url，可以省略掉主机名，若有同名url，则添加？xxx的方式来区分）两个属性值-->
+	<bean id="beijingHomeProcess" class="com.heetian.spider.process.peking.HomeProcess">
+		<!--host、referer两个属性为home处理类必须注入的，用来添加host、referer两个http请求头  -->
+		<property name="host" value="qyxy.baic.gov.cn"></property>
+		<property name="referer" value="http://qyxy.baic.gov.cn/beijing"></property>
+		<!-- home处理器类可选注入，用来指定一个省份的识别程序，若不注入，则交给验证码识别的自动切换程序处理 -->
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.Peking"></property>
+		<!-- home处理器类可选注入，用来监听http响应码！200的情况调用此类处理 ,若不注入，当发生！200，则依旧会调用处理类处理请求-->
+		<!-- <property name="errorStatusListen" ref="pekingErrorStatusListen"></property> -->
+		<property name="nextHandle" ref="DownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://qyxy.baic.gov.cn/beijing"></property>
+	</bean>
+	<bean id="DownloadCodeProcess" class="com.heetian.spider.process.peking.DownloadCodeProcess">
+		<property name="nextHandle" ref="JiaoYanCodeProcess"></property>
+		<property name="uniqueWebUri" value="/CheckCodeYunSuan"></property>
+	</bean>
+	<bean id="JiaoYanCodeProcess" class="com.heetian.spider.process.peking.ValidateCodeProcess">
+		<property name="nextHandle" ref="JiaoYanKeyProcess"></property>
+		<property name="uniqueWebUri" value="/gjjbj/gjjQueryCreditAction!checkCode.dhtml"></property>
+	</bean>
+	<bean id="JiaoYanKeyProcess" class="com.heetian.spider.process.peking.ValidateKeyProcess">
+		<property name="nextHandle" ref="SubmitRequestProcess"></property>
+		<property name="uniqueWebUri" value="/gjjbj/gjjQueryCreditAction!findLiteralWord.dhtml"></property>
+	</bean>
+	<bean id="SubmitRequestProcess" class="com.heetian.spider.process.peking.CompanyURLProcess">
+		<property name="nextHandle" ref="ContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/gjjbj/gjjQueryCreditAction!getBjQyList.dhtml"></property>
+	</bean>
+	<bean id="ContexJBXXProcess" class="com.heetian.spider.process.peking.ContexJBXXProcess">
+		<property name="nextHandle" ref="ContextBGXXProcess"></property>
+		<property name="uniqueWebUri" value="/gjjbj/gjjQueryCreditAction!openEntInfo.dhtml"></property>
+	</bean>
+	<bean id="ContextBGXXProcess" class="com.heetian.spider.process.peking.ContextBGXXProcess">
+		<property name="nextHandle" ref="ContextFZJGProcess"></property>
+		<property name="uniqueWebUri" value="/gjjbj/gjjQueryCreditAction!biangengFrame.dhtml"></property>
+	</bean>
+	<bean id="ContextFZJGProcess" class="com.heetian.spider.process.peking.ContextFZJGProcess">
+		<property name="nextHandle" ref="ContextGDXXProcess"></property>
+		<property name="uniqueWebUri" value="/gjjbj/gjjQueryCreditAction!fzjgFrame.dhtml"></property>
+	</bean>
+	<bean id="ContextGDXXProcess" class="com.heetian.spider.process.peking.ContextGDXXProcess">
+		<property name="nextHandle" ref="ContextZYRYProcess"></property>
+		<property name="uniqueWebUri" value="/gjjbj/gjjQueryCreditAction!tzrFrame.dhtml"></property>
+	</bean>
+	<bean id="ContextZYRYProcess" class="com.heetian.spider.process.peking.ContextZYRYProcess">
+		<property name="nextHandle" ref="ContextBGXXXQProcesstzr"></property>
+		<property name="uniqueWebUri" value="/gjjbj/gjjQueryCreditAction!zyryFrame.dhtml"></property>
+	</bean>
+	<bean id="ContextBGXXXQProcesstzr" class="com.heetian.spider.process.peking.ContextBGXXXQProcess">
+		<property name="nextHandle" ref="ContextBGXXXQProcesszyry"></property>
+		<property name="uniqueWebUri" value="/gjjbj/gjjQueryCreditAction!tzrBgxx.dhtml"></property>
+	</bean>
+	<bean id="ContextBGXXXQProcesszyry" class="com.heetian.spider.process.peking.ContextBGXXXQProcess">
+	<property name="nextHandle" ref="ContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/gjjbj/gjjQueryCreditAction!zyryBgxx.dhtml"></property>
+	</bean>
+	<bean id="ContextGDAndCZXXProcess" class="com.heetian.spider.process.peking.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/gjjbj/gjjQueryCreditAction!touzirenInfo.dhtml"></property>
+	</bean>
+<!-- 北京页面解析类 -->
+<!-- 重庆 -->
+<bean id="chongqingHomeProcess" class="com.heetian.spider.process.chongqing.HomeProcess">
+		<property name="host" value="gsxt.cqgs.gov.cn"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.ChongQing"></property>
+		<property name="nextHandle" ref="chongqingDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.cqgs.gov.cn/?xx=xx"></property>
+	</bean>
+	<bean id="chongqingDownloadCodeProcess" class="com.heetian.spider.process.chongqing.DownloadCodeProcess">
+		<property name="nextHandle" ref="chongqingCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/sc.action"></property>
+	</bean>
+	<bean id="chongqingCompanyURLProcess" class="com.heetian.spider.process.chongqing.CompanyURLProcess">
+		<property name="nextHandle" ref="chongqingCompanyDetailProcess"></property>
+		<property name="uniqueWebUri" value="/search.action"></property>
+	</bean>
+	<bean id="chongqingCompanyDetailProcess" class="com.heetian.spider.process.chongqing.CompanyDetailProcess">
+		<property name="nextHandle" ref="chongqingContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/search_ent"></property>
+	</bean>
+	<bean id="chongqingContexJBXXProcess" class="com.heetian.spider.process.chongqing.ContexJBXXProcess">
+		<property name="nextHandle" ref="chongqingContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/search_getEnt.action"></property>
+	</bean>
+	<bean id="chongqingContextGDAndCZXXProcess" class="com.heetian.spider.process.chongqing.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/aiccips/pub/gsnzczxxdetail/"></property>
+	</bean>
+<!-- 重庆 -->
+<!-- 辽宁页面解析类 -->
+	<bean id="liaoningHomeProcess" class="com.heetian.spider.process.liaoning.HomeProcess">
+		<property name="setup" value="1"></property>
+		<property name="host" value="gsxt.lngs.gov.cn"></property>
+		<property name="referer" value="http://gsxt.lngs.gov.cn/saicpub"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.Liaoning"></property>
+		<property name="nextHandle" ref="liaoningDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="/saicpub/entPublicitySC/entPublicityDC/entPublicity/search/searchmain.jsp"></property>
+	</bean>
+	<bean id="liaoningDownloadCodeProcess" class="com.heetian.spider.process.liaoning.DownloadCodeProcess">
+		<property name="nextHandle" ref="liaoningCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/saicpub/commonsSC/loginDC/securityCode.action"></property>
+	</bean>
+	<bean id="liaoningCompanyURLProcess" class="com.heetian.spider.process.liaoning.CompanyURLProcess">
+		<property name="nextHandle" ref="liaoningContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/saicpub/entPublicitySC/entPublicityDC/lngsSearchFpc.action"></property>
+	</bean>
+	<bean id="liaoningContexJBXXProcess" class="com.heetian.spider.process.liaoning.ContexJBXXProcess">
+		<property name="nextHandle" ref="liaoningContextBGXXProcess"></property>
+		<property name="uniqueWebUri" value="/saicpub/entPublicitySC/entPublicityDC/getJbxxAction.action"></property>
+	</bean>
+	<bean id="liaoningContextBGXXProcess" class="com.heetian.spider.process.liaoning.ContextBGXXProcess">
+		<property name="nextHandle" ref="liaoningContextFZJGProcess"></property>
+		<property name="uniqueWebUri" value="/saicpub/entPublicitySC/entPublicityDC/getBgxxAction.action"></property>
+	</bean>
+	<bean id="liaoningContextFZJGProcess" class="com.heetian.spider.process.liaoning.ContextFZJGProcess">
+		<property name="nextHandle" ref="liaoningContextGDXXProcess"></property>
+		<property name="uniqueWebUri" value="/saicpub/entPublicitySC/entPublicityDC/getFgsxxAction.action"></property>
+	</bean>
+	<bean id="liaoningContextGDXXProcess" class="com.heetian.spider.process.liaoning.ContextGDXXProcess">
+		<property name="nextHandle" ref="liaoningContextZYRYProcess"></property>
+		<property name="uniqueWebUri" value="/saicpub/entPublicitySC/entPublicityDC/getTzrxxAction.action"></property>
+	</bean>
+	<bean id="liaoningContextZYRYProcess" class="com.heetian.spider.process.liaoning.ContextZYRYProcess">
+		<property name="nextHandle" ref="liaoningContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/saicpub/entPublicitySC/entPublicityDC/getZyryxxAction.action"></property>
+	</bean>
+	<bean id="liaoningContextGDAndCZXXProcess" class="com.heetian.spider.process.liaoning.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/saicpub/entPublicitySC/entPublicityDC/getGsgsTzrxxPojoList.action"></property>
+	</bean>
+<!-- 辽宁页面解析类 -->
+<!-- 吉林市 -->
+<bean id="jilinHomeProcess" class="com.heetian.spider.process.jilin.HomeProcess">
+		<property name="host" value="211.141.74.198:8081"></property>
+		<property name="referer" value="http://211.141.74.198:8081/aiccips/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.JiLin"></property>
+		<property name="nextHandle" ref="jilinDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="/aiccips/?xxx"></property>
+	</bean>
+	<bean id="jilinDownloadCodeProcess" class="com.heetian.spider.process.jilin.DownloadCodeProcess">
+		<property name="nextHandle" ref="jilinCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/aiccips/securitycode"></property>
+	</bean>
+	<bean id="jilinCompanyURLProcess" class="com.heetian.spider.process.jilin.CompanyURLProcess">
+		<property name="nextHandle" ref="jilinContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/aiccips/pub/indsearch"></property>
+	</bean>
+	<bean id="jilinContexJBXXProcess" class="com.heetian.spider.process.jilin.ContexJBXXProcess">
+		<property name="nextHandle" ref="jilinContextFZJGProcess"></property>
+		<property name="uniqueWebUri" value="/aiccips/pub/gsgsdetail"></property>
+	</bean>
+	<bean id="jilinContextFZJGProcess" class="com.heetian.spider.process.jilin.ContextFZJGProcess">
+		<property name="nextHandle" ref="jilinContextZYRYProcess"></property>
+		<property name="uniqueWebUri" value="/aiccips/pub/gsfzjg"></property>
+	</bean>
+	<bean id="jilinContextZYRYProcess" class="com.heetian.spider.process.jilin.ContextZYRYProcess">
+		<property name="nextHandle" ref="jilinContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/aiccips/pub/gsryxx"></property>
+	</bean>
+	<bean id="jilinContextGDAndCZXXProcess" class="com.heetian.spider.process.jilin.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/aiccips/pub/gsnzczxxdetail/"></property>
+	</bean>
+<!-- 吉林市 -->
+<!-- 山东 -->
+<bean id="shandongHomeProcess" class="com.heetian.spider.process.shandong.HomeProcess">
+		<property name="host" value="218.57.139.24"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.ShanDong"></property>
+		<property name="nextHandle" ref="shandongDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://218.57.139.24/?xxx"></property>
+	</bean>
+	<bean id="shandongDownloadCodeProcess" class="com.heetian.spider.process.shandong.DownloadCodeProcess">
+		<property name="nextHandle" ref="shandongCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/securitycode"></property>
+	</bean>
+	<bean id="shandongCompanyURLProcess" class="com.heetian.spider.process.shandong.CompanyURLProcess">
+		<property name="nextHandle" ref="shandongContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/pub/indsearch"></property>
+	</bean>
+	<bean id="shandongContexJBXXProcess" class="com.heetian.spider.process.shandong.ContexJBXXProcess">
+		<property name="nextHandle" ref="shandongContextFZJGProcess"></property>
+		<property name="uniqueWebUri" value="/pub/gsgsdetail"></property>
+	</bean>
+	<bean id="shandongContextFZJGProcess" class="com.heetian.spider.process.shandong.ContextFZJGProcess">
+		<property name="nextHandle" ref="shandongContextZYRYProcess"></property>
+		<property name="uniqueWebUri" value="/pub/gsfzjg"></property>
+	</bean>
+	<bean id="shandongContextZYRYProcess" class="com.heetian.spider.process.shandong.ContextZYRYProcess">
+		<property name="nextHandle" ref="shandongContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/pub/gsryxx"></property>
+	</bean>
+	<bean id="shandongContextGDAndCZXXProcess" class="com.heetian.spider.process.shandong.ContextGDAndCZXXProcess">
+		<property name="nextHandle" ref="shandongCompanyURLDetailProcess"></property>
+		<property name="uniqueWebUri" value="/pub/gsnzczxxdetail/"></property>
+	</bean>
+	<bean id="shandongCompanyURLDetailProcess" class="com.heetian.spider.process.shandong.CompanyURLDetailProcess">
+		<property name="uniqueWebUri" value="/pub/search"></property>
+	</bean>
+<!-- 山东 -->
+<!-- 河南-->
+<bean id="henanHomeProcess" class="com.heetian.spider.process.henan.HomeProcess">
+		<property name="setup" value="1"></property>
+		<property name="host" value="222.143.24.157"></property>
+		<property name="referer" value="http://222.143.24.157/search.jspx"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.Idiom"></property>
+		<property name="nextHandle" ref="henanDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://222.143.24.157/search.jspx"></property>
+	</bean>
+	<bean id="henanDownloadCodeProcess" class="com.heetian.spider.process.henan.DownloadCodeProcess">
+		<property name="nextHandle" ref="henanCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/validateCode.jspx"></property>
+	</bean>
+	<bean id="henanCompanyURLProcess" class="com.heetian.spider.process.henan.CompanyURLProcess">
+		<property name="nextHandle" ref="henanContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/searchList.jspx"></property>
+	</bean>
+	<bean id="henanContexJBXXProcess" class="com.heetian.spider.process.henan.ContexJBXXProcess">
+		<property name="nextHandle" ref="henanContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/businessPublicity.jspx"></property>
+	</bean>
+	<bean id="henanContextGDAndCZXXProcess" class="com.heetian.spider.process.henan.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/queryInvDetailAction.jspx"></property>
+	</bean>
+<!-- 河南 -->
+<!-- 安徽 -->
+<bean id="anhuiHomeProcess" class="com.heetian.spider.process.anhui.HomeProcess">
+		<property name="host" value="www.ahcredit.gov.cn"></property>
+		<property name="referer" value="http://www.ahcredit.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.Idiom"></property>
+		<property name="nextHandle" ref="anhuiDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://www.ahcredit.gov.cn/search.jspx"></property>
+	</bean>
+	<bean id="anhuiDownloadCodeProcess" class="com.heetian.spider.process.anhui.DownloadCodeProcess">
+		<property name="nextHandle" ref="anhuiCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/validateCode.jspx"></property>
+	</bean>
+	<bean id="anhuiCompanyURLProcess" class="com.heetian.spider.process.anhui.CompanyURLProcess">
+		<property name="nextHandle" ref="anhuiContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/searchList.jspx"></property>
+	</bean>
+	<bean id="anhuiContexJBXXProcess" class="com.heetian.spider.process.anhui.ContexJBXXProcess">
+	<property name="nextHandle" ref="anhuiContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/businessPublicity.jspx"></property>
+	</bean>
+	<bean id="anhuiContextGDAndCZXXProcess" class="com.heetian.spider.process.anhui.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/queryInvDetailAction.jspx"></property>
+	</bean>
+<!-- 安徽 -->
+<!-- 黑龙江 -->
+<bean id="heilongjiangHomeProcess" class="com.heetian.spider.process.heilongjiang.HomeProcess">
+		<property name="host" value="gsxt.hljaic.gov.cn"></property>
+		<property name="referer" value="http://gsxt.hljaic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.Idiom"></property>
+		<property name="nextHandle" ref="heilongjiangDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.hljaic.gov.cn/search.jspx"></property>
+	</bean>
+	<bean id="heilongjiangDownloadCodeProcess" class="com.heetian.spider.process.heilongjiang.DownloadCodeProcess">
+		<property name="nextHandle" ref="heilongjiangCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/validateCode.jspx"></property>
+	</bean>
+	<bean id="heilongjiangCompanyURLProcess" class="com.heetian.spider.process.heilongjiang.CompanyURLProcess">
+		<property name="nextHandle" ref="heilongjiangContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/searchList.jspx"></property>
+	</bean>
+	<bean id="heilongjiangContexJBXXProcess" class="com.heetian.spider.process.heilongjiang.ContexJBXXProcess">
+		<property name="nextHandle" ref="heilongjiangContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/businessPublicity.jspx"></property>
+	</bean>
+	<bean id="heilongjiangContextGDAndCZXXProcess" class="com.heetian.spider.process.heilongjiang.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/queryInvDetailAction.jspx"></property>
+	</bean>
+<!-- 黑龙江 -->
+<!-- 广西 -->
+<bean id="guangxiHomeProcess" class="com.heetian.spider.process.guangxi.HomeProcess">
+		<property name="host" value="gxqyxygs.gov.cn"></property>
+		<property name="referer" value="http://gxqyxygs.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.Idiom"></property>
+		<property name="nextHandle" ref="guangxiDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://gxqyxygs.gov.cn/search.jspx"></property>
+	</bean>
+	<bean id="guangxiDownloadCodeProcess" class="com.heetian.spider.process.guangxi.DownloadCodeProcess">
+		<property name="nextHandle" ref="guangxiCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/validateCode.jspx"></property>
+	</bean>
+	<bean id="guangxiCompanyURLProcess" class="com.heetian.spider.process.guangxi.CompanyURLProcess">
+		<property name="nextHandle" ref="guangxiContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/searchList.jspx"></property>
+	</bean>
+	<bean id="guangxiContexJBXXProcess" class="com.heetian.spider.process.guangxi.ContexJBXXProcess">
+		<property name="nextHandle" ref="guangxiContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/businessPublicity.jspx"></property>
+	</bean>
+	<bean id="guangxiContextGDAndCZXXProcess" class="com.heetian.spider.process.guangxi.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/queryInvDetailAction.jspx"></property>
+	</bean>
+<!-- 广西 -->
+<!-- 山西-->
+<bean id="shanxidongHomeProcess" class="com.heetian.spider.process.shanxidong.HomeProcess">
+		<property name="host" value="218.26.1.108"></property>
+		<property name="referer" value="http://218.26.1.108/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.Idiom"></property>
+		<property name="nextHandle" ref="shanxidongDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://218.26.1.108/search.jspx"></property>
+	</bean>
+	<bean id="shanxidongDownloadCodeProcess" class="com.heetian.spider.process.shanxidong.DownloadCodeProcess">
+		<property name="setup" value="3"></property>
+		<property name="nextHandle" ref="shanxidongCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/validateCode.jspx"></property>
+	</bean>
+	<bean id="shanxidongCompanyURLProcess" class="com.heetian.spider.process.shanxidong.CompanyURLProcess">
+		<property name="setup" value="5"></property>
+		<property name="nextHandle" ref="shanxidongContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/searchList.jspx"></property>
+	</bean>
+	<bean id="shanxidongContexJBXXProcess" class="com.heetian.spider.process.shanxidong.ContexJBXXProcess">
+		<property name="nextHandle" ref="shanxidongContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/businessPublicity.jspx"></property>
+	</bean>
+	<bean id="shanxidongContextGDAndCZXXProcess" class="com.heetian.spider.process.shanxidong.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/queryInvDetailAction.jspx"></property>
+	</bean>
+<!-- 山西 -->
+<!-- 西藏-->
+<bean id="xizangHomeProcess" class="com.heetian.spider.process.xizang.HomeProcess">
+		<property name="host" value="gsxt.xzaic.gov.cn"></property>
+		<property name="referer" value="http://gsxt.xzaic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.Idiom"></property>
+		<property name="nextHandle" ref="xizangDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.xzaic.gov.cn/search.jspx"></property>
+	</bean>
+	<bean id="xizangDownloadCodeProcess" class="com.heetian.spider.process.xizang.DownloadCodeProcess">
+		<property name="nextHandle" ref="xizangCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/validateCode.jspx"></property>
+	</bean>
+	<bean id="xizangCompanyURLProcess" class="com.heetian.spider.process.xizang.CompanyURLProcess">
+		<property name="nextHandle" ref="xizangContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/searchList.jspx"></property>
+	</bean>
+	<bean id="xizangContexJBXXProcess" class="com.heetian.spider.process.xizang.ContexJBXXProcess">
+		<property name="nextHandle" ref="xizangContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/businessPublicity.jspx"></property>
+	</bean>
+	<bean id="xizangContextGDAndCZXXProcess" class="com.heetian.spider.process.xizang.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/queryInvDetailAction.jspx"></property>
+		<property name="nextHandle" ref="xizangContextGS_QYNB_Process"></property>
+	</bean>
+	
+	<bean id="xizangContextGS_QYNB_Process" class="com.heetian.spider.process.xizang.ContextGS_QYNB_Process">
+		<property name="uniqueWebUri" value="/enterprisePublicity.jspx"></property>
+		<property name="nextHandle" ref="xizangContextGS_QYNB_XQ_Process"></property>
+	</bean>
+	<bean id="xizangContextGS_QYNB_XQ_Process" class="com.heetian.spider.process.xizang.ContextGS_QYNB_XQ_Process">
+		<property name="uniqueWebUri" value="/QueryYearExamineDetail.jspx"></property>
+	</bean>
+<!-- 西藏 -->
+<!-- 湖北-->
+<bean id="hubeiHomeProcess" class="com.heetian.spider.process.hubei.HomeProcess">
+		<property name="host" value="xyjg.egs.gov.cn"></property>
+		<property name="referer" value="http://xyjg.egs.gov.cn/ECPS_HB/index.jsp"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.HuBei"></property>
+		<property name="nextHandle" ref="hubeiDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://xyjg.egs.gov.cn/ECPS_HB/search.jspx"></property>
+	</bean>
+	<bean id="hubeiDownloadCodeProcess" class="com.heetian.spider.process.hubei.DownloadCodeProcess">
+		<property name="nextHandle" ref="hubeiCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/ECPS_HB/validateCode.jspx"></property>
+	</bean>
+	<bean id="hubeiCompanyURLProcess" class="com.heetian.spider.process.hubei.CompanyURLProcess">
+		<property name="nextHandle" ref="hubeiContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/ECPS_HB/searchList.jspx"></property>
+	</bean>
+	<bean id="hubeiContexJBXXProcess" class="com.heetian.spider.process.hubei.ContexJBXXProcess">
+		<property name="nextHandle" ref="hubeiContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/ECPS_HB/businessPublicity.jspx"></property>
+	</bean>
+	<bean id="hubeiContextGDAndCZXXProcess" class="com.heetian.spider.process.hubei.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/ECPS_HB/queryInvDetailAction.jspx"></property>
+	</bean>
+<!-- 湖北 -->
+<!-- 青海-->
+<bean id="qinghaiHomeProcess" class="com.heetian.spider.process.qinghai.HomeProcess">
+		<property name="host" value="218.95.241.36"></property>
+		<property name="referer" value="http://218.95.241.36/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.Idiom"></property>
+		<property name="nextHandle" ref="qinghaiDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://218.95.241.36/search.jspx"></property>
+	</bean>
+	<bean id="qinghaiDownloadCodeProcess" class="com.heetian.spider.process.qinghai.DownloadCodeProcess">
+		<property name="nextHandle" ref="qinghaiCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/validateCode.jspx"></property>
+	</bean>
+	<bean id="qinghaiCompanyURLProcess" class="com.heetian.spider.process.qinghai.CompanyURLProcess">
+		<property name="nextHandle" ref="qinghaiContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/searchList.jspx"></property>
+	</bean>
+	<bean id="qinghaiContexJBXXProcess" class="com.heetian.spider.process.qinghai.ContexJBXXProcess">
+		<property name="nextHandle" ref="qinghaiContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/businessPublicity.jspx"></property>
+	</bean>
+	<bean id="qinghaiContextGDAndCZXXProcess" class="com.heetian.spider.process.qinghai.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/queryInvDetailAction.jspx"></property>
+	</bean>
+<!-- 青海 -->
+
+<!-- 天津 -->
+<bean id="tianjingHomeProcess" class="com.heetian.spider.process.tianjing.HomeProcess">
+		<property name="host" value="tjcredit.gov.cn"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.TianJing"></property>
+		<property name="nextHandle" ref="tianjingDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://tjcredit.gov.cn/platform/saic/index.ftl"></property>
+	</bean>
+	<bean id="tianjingDownloadCodeProcess" class="com.heetian.spider.process.tianjing.DownloadCodeProcess">
+		<property name="nextHandle" ref="tianjingCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/verifycode"></property>
+	</bean>
+	<bean id="tianjingCompanyURLProcess" class="com.heetian.spider.process.tianjing.CompanyURLProcess">
+		<property name="nextHandle" ref="tianjingDetailURLProcess"></property>
+		<property name="uniqueWebUri" value="/platform/saic/search.ftl"></property>
+	</bean>
+	<bean id="tianjingDetailURLProcess" class="com.heetian.spider.process.tianjing.DetailURLProcess">
+		<property name="nextHandle" ref="tianjingDetai2lURLProcess"></property>
+		<property name="uniqueWebUri" value="/platform/saic/viewBase.ftl"></property>
+	</bean>
+	<bean id="tianjingDetai2lURLProcess" class="com.heetian.spider.process.tianjing.Detai2lURLProcess">
+		<property name="nextHandle" ref="tianjingContexDJXXProcess"></property>
+		<property name="uniqueWebUri" value="/platform/saic/topInfoClass.json"></property>
+	</bean>
+	<bean id="tianjingContexDJXXProcess" class="com.heetian.spider.process.tianjing.ContexDJXXProcess">
+		<property name="nextHandle" ref="tianjingContextGDAndCZXXProcess"></property>
+		<property name="uniqueWebUri" value="/platform/saic/baseInfo.json"></property>
+	</bean>
+	<bean id="tianjingContextGDAndCZXXProcess" class="com.heetian.spider.process.tianjing.ContextGDAndCZXXProcess">
+		<property name="nextHandle" ref="tianjingContexDJXX1Process"></property>
+		<property name="uniqueWebUri" value="/saicpf/gsgdcz"></property>
+	</bean>
+	<bean id="tianjingContexDJXX1Process" class="com.heetian.spider.process.tianjing.ContexDJXX1Process">
+		<property name="uniqueWebUri" value="/platform/saic/baseInfo.do"></property>
+	</bean>
+<!-- 天津 -->
+<!-- 江苏 -->
+<bean id="jiangsuHomeProcess" class="com.heetian.spider.process.jiangsu.HomeProcess">
+		<property name="host" value="www.jsgsj.gov.cn:58888"></property>
+		<property name="referer" value="http://www.jsgsj.gov.cn:58888/province/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.JiangSu"></property>
+		<property name="nextHandle" ref="jiangsuDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://www.jsgsj.gov.cn:58888/province?xxxx"></property>
+	</bean>
+	<bean id="jiangsuDownloadCodeProcess" class="com.heetian.spider.process.jiangsu.DownloadCodeProcess">
+		<property name="nextHandle" ref="jiangsuValidateCodeProcess"></property>
+		<property name="uniqueWebUri" value="/province/rand_img.jsp"></property>
+	</bean>
+	<bean id="jiangsuValidateCodeProcess" class="com.heetian.spider.process.jiangsu.ValidateCodeProcess">
+		<property name="nextHandle" ref="jiangsuValidateKeyProcess"></property>
+		<property name="uniqueWebUri" value="/province/infoQueryServlet.json?checkCode=true"></property>
+	</bean>
+	<bean id="jiangsuValidateKeyProcess" class="com.heetian.spider.process.jiangsu.ValidateKeyProcess">
+		<property name="nextHandle" ref="jiangsuCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="/province/queryResultList.jsp"></property>
+	</bean>
+	<bean id="jiangsuCompanyURLProcess" class="com.heetian.spider.process.jiangsu.CompanyURLProcess">
+		<property name="nextHandle" ref="jiangsuContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/province/infoQueryServlet.json?queryCinfo=true"></property>
+	</bean>
+	
+	<!-- <bean id="jiangsuDetailURLProcess" class="com.heetian.spider.process.jiangsu.DetailURLProcess">
+		<property name="nextHandle" ref="jiangsuDetailURLProcess1"></property>
+		<property name="uniqueWebUri" value="/ecipplatform/inner_ci/ci_queryCorpInfor_gsRelease.jsp"></property>
+	</bean>
+	<bean id="jiangsuDetailURLProcess1" class="com.heetian.spider.process.jiangsu.DetailURLProcess">
+		<property name="nextHandle" ref="jiangsuDetailURLProcess2"></property>
+		<property name="uniqueWebUri" value="/ecipplatform/inner_cb/cb_queryCorpInfor_gsRelease.jsp"></property>
+	</bean>
+	<bean id="jiangsuDetailURLProcess2" class="com.heetian.spider.process.jiangsu.DetailURLProcess">
+		<property name="nextHandle" ref="jiangsuDetailURLProcess3"></property>
+		<property name="uniqueWebUri" value="/ecipplatform/gtgsh/gtgsh_queryCorpInfor_gsRelease.jsp"></property>
+	</bean>
+	<bean id="jiangsuDetailURLProcess3" class="com.heetian.spider.process.jiangsu.DetailURLProcess">
+		<property name="nextHandle" ref="jiangsuDetailURLProcess4"></property>
+		<property name="uniqueWebUri" value="/ecipplatform/outer_fiei/outer_fiei_queryCorpInfor_gsRelease.jsp"></property>
+	</bean>
+	<bean id="jiangsuDetailURLProcess4" class="com.heetian.spider.process.jiangsu.DetailURLProcess">
+		<property name="nextHandle" ref="jiangsuDetailURLProcess5"></property>
+		<property name="uniqueWebUri" value="/ecipplatform/pfc/pfc_queryCorpInfor_gsRelease.jsp"></property>
+	</bean>
+	<bean id="jiangsuDetailURLProcess5" class="com.heetian.spider.process.jiangsu.DetailURLProcess">
+		<property name="nextHandle" ref="jiangsuDetailURLProcess6"></property>
+		<property name="uniqueWebUri" value="/ecipplatform/inner_pspc/pspc_queryCorpInfor_gsRelease.jsp"></property>
+	</bean>
+	<bean id="jiangsuDetailURLProcess6" class="com.heetian.spider.process.jiangsu.DetailURLProcess">
+		<property name="nextHandle" ref="jiangsuContexJBXXProcess"></property>
+		<property name="uniqueWebUri" value="/ecipplatform/inner_pb/pb_queryCorpInfor_gsRelease.jsp"></property>
+	</bean> -->
+	
+	<bean id="jiangsuContexJBXXProcess" class="com.heetian.spider.process.jiangsu.ContexJBXXProcess">
+		<property name="nextHandle" ref="jiangsuContexBGXXProcess"></property>
+		<property name="uniqueWebUri" value="/ecipplatform/ciServlet.json"></property>
+	</bean>
+	<bean id="jiangsuContexBGXXProcess" class="com.heetian.spider.process.jiangsu.ContexBGXXProcess">
+		<!-- <property name="nextHandle" ref="jiangsuDetailGDProcess"></property> -->
+		<!-- 不包含其他步骤 -->
+		<!-- <property name="uniqueWebUri" value="/ecipplatform/commonServlet.json?commonEnter=true"></property> -->
+		<property name="uniqueWebUri" value="/commonServlet.json"></property>
+	</bean>
+	<!-- <bean id="jiangsuDetailGDProcess" class="com.heetian.spider.process.jiangsu.DetailGDProcess">
+		<property name="uniqueWebUri" value="/ecipplatform/inner_ci/ci_gsRelease_investorInfor.jsp"></property>
+	</bean> -->
+<!-- 江苏 -->
+<!-- 四川 -->
+	<bean id="sichuanHomeProcess" class="com.heetian.spider.process.SiChuan.HomeProcess">
+		<property name="host" value="gsxt.scaic.gov.cn"></property>
+		<property name="referer" value="http://gsxt.scaic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.SiChuan"></property>
+		<property name="nextHandle" ref="sichuanDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.scaic.gov.cn/?xxx"></property>
+	</bean>
+	<bean id="sichuanDownloadCodeProcess" class="com.heetian.spider.process.SiChuan.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=createYzm"></property>
+		<property name="nextHandle" ref="sichuanCompanyURLProcess"></property>
+	</bean>
+	<bean id="sichuanCompanyURLProcess" class="com.heetian.spider.process.SiChuan.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=list"></property>
+		<property name="nextHandle" ref="sichuanContextJBXXProcess"></property>
+	</bean>
+	<bean id="sichuanContextJBXXProcess" class="com.heetian.spider.process.SiChuan.ContextJBXXProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=qyInfo"></property>
+		<property name="nextHandle" ref="sichuanContextBAXXProcess"></property>
+	</bean>
+	<bean id="sichuanContextBAXXProcess" class="com.heetian.spider.process.SiChuan.ContextBAXXProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=baInfo"></property>
+		<property name="nextHandle" ref="sichuanContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="sichuanContextGDAndCZXXProcess" class="com.heetian.spider.process.SiChuan.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=tzrCzxxDetial"></property>
+	</bean>
+<!-- 四川 -->
+<!-- 陕西 -->
+	<bean id="shanxixiHomeProcess" class="com.heetian.spider.process.shanxixi.HomeProcess">
+		<property name="host" value="xygs.snaic.gov.cn"></property>
+		<property name="referer" value="http://xygs.snaic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.SiChuan"></property>
+		<property name="nextHandle" ref="shanxixiDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://xygs.snaic.gov.cn/?xx=xx"></property>
+	</bean>
+	<bean id="shanxixiDownloadCodeProcess" class="com.heetian.spider.process.shanxixi.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=createYzm"></property>
+		<property name="nextHandle" ref="shanxixiCompanyURLProcess"></property>
+	</bean>
+	<bean id="shanxixiCompanyURLProcess" class="com.heetian.spider.process.shanxixi.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=list"></property>
+		<property name="nextHandle" ref="shanxixiContextJBXXProcess"></property>
+	</bean>
+	<bean id="shanxixiContextJBXXProcess" class="com.heetian.spider.process.shanxixi.ContextJBXXProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=qyInfo"></property>
+		<property name="nextHandle" ref="shanxixiContextBAXXProcess"></property>
+	</bean>
+	<bean id="shanxixiContextBAXXProcess" class="com.heetian.spider.process.shanxixi.ContextBAXXProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=baInfo"></property>
+		<property name="nextHandle" ref="shanxixiContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="shanxixiContextGDAndCZXXProcess" class="com.heetian.spider.process.shanxixi.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=tzrCzxxDetial"></property>
+	</bean>
+<!-- 陕西 -->
+<!-- 新疆 -->
+	<bean id="xinjiangHomeProcess" class="com.heetian.spider.process.xinjiang.HomeProcess">
+		<property name="host" value="gsxt.xjaic.gov.cn:7001"></property>
+		<property name="referer" value="http://gsxt.xjaic.gov.cn:7001/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.SiChuan"></property>
+		<property name="nextHandle" ref="xinjiangDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.xjaic.gov.cn:7001/?xxxx"></property>
+	</bean>
+	<bean id="xinjiangDownloadCodeProcess" class="com.heetian.spider.process.xinjiang.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=createYzm"></property>
+		<property name="nextHandle" ref="xinjiangCompanyURLProcess"></property>
+	</bean>
+	<bean id="xinjiangCompanyURLProcess" class="com.heetian.spider.process.xinjiang.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=list"></property>
+		<property name="nextHandle" ref="xinjiangContextJBXXProcess"></property>
+	</bean>
+	<bean id="xinjiangContextJBXXProcess" class="com.heetian.spider.process.xinjiang.ContextJBXXProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=qyInfo"></property>
+		<property name="nextHandle" ref="xinjiangContextBAXXProcess"></property>
+	</bean>
+	<bean id="xinjiangContextBAXXProcess" class="com.heetian.spider.process.xinjiang.ContextBAXXProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=baInfo"></property>
+		<property name="nextHandle" ref="xinjiangContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="xinjiangContextGDAndCZXXProcess" class="com.heetian.spider.process.xinjiang.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/ztxy.do?method=tzrCzxxDetial"></property>
+	</bean>
+<!-- 新疆 -->
+<!-- 甘肃 -->
+	<bean id="gansuHomeProcess" class="com.heetian.spider.process.gansu.HomeProcess">
+		<property name="host" value="xygs.gsaic.gov.cn"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.GanSu"></property>
+		<property name="nextHandle" ref="gansuDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://xygs.gsaic.gov.cn/gsxygs/main.jsp"></property>
+	</bean>
+	<bean id="gansuDownloadCodeProcess" class="com.heetian.spider.process.gansu.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="/gsxygs/securitycode.jpg"></property>
+		<property name="nextHandle" ref="gansuCompanyURLProcess"></property>
+	</bean>
+	<bean id="gansuCompanyURLProcess" class="com.heetian.spider.process.gansu.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/gsxygs/pub!list.do"></property>
+		<property name="nextHandle" ref="gansuContextJBXXProcess"></property>
+	</bean>
+	<bean id="gansuContextJBXXProcess" class="com.heetian.spider.process.gansu.ContexJBXXProcess">
+		<property name="uniqueWebUri" value="/gsxygs/pub!view.do"></property>
+		<property name="nextHandle" ref="gansuContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="gansuContextGDAndCZXXProcess" class="com.heetian.spider.process.gansu.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/gsxygs/pub!getDetails.do"></property>
+	</bean>
+<!-- 甘肃 -->
+
+<!-- 江西 -->
+	<bean id="jiangxiHomeProcess" class="com.heetian.spider.process.jiangxi.HomeProcess">
+		<property name="host" value="gsxt.jxaic.gov.cn"></property>
+		<property name="referer" value="http://gsxt.jxaic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.JiangXi"></property>
+		<property name="nextHandle" ref="jiangxiDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.jxaic.gov.cn/?xx=xx"></property>
+	</bean>
+	<bean id="jiangxiDownloadCodeProcess" class="com.heetian.spider.process.jiangxi.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="/warningetp/reqyzm.do"></property>
+		<property name="nextHandle" ref="jiangxiValidateCodeProcess"></property>
+	</bean>
+	<bean id="jiangxiValidateCodeProcess" class="com.heetian.spider.process.jiangxi.ValidateCodeProcess">
+		<property name="uniqueWebUri" value="/warningetp/yzm.do"></property>
+		<property name="nextHandle" ref="jiangxiCompanyURLProcess"></property>
+	</bean>
+	<bean id="jiangxiCompanyURLProcess" class="com.heetian.spider.process.jiangxi.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/search/queryenterpriseinfoindex.do"></property>
+		<property name="nextHandle" ref="jiangxiContextJBXXProcess"></property>
+	</bean>
+	<bean id="jiangxiContextJBXXProcess" class="com.heetian.spider.process.jiangxi.ContexJBXXProcess">
+		<property name="uniqueWebUri" value="/baseinfo/queryenterpriseinfoByRegnore.do"></property>
+		<property name="nextHandle" ref="jiangxiContextGDXXProcess"></property>
+	</bean>
+	<bean id="jiangxiContextGDXXProcess" class="com.heetian.spider.process.jiangxi.ContextGDXXProcess">
+		<property name="uniqueWebUri" value="/einvperson/getqueryeInvPersonService.do"></property>
+		<property name="nextHandle" ref="jiangxiContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="jiangxiContextGDAndCZXXProcess" class="com.heetian.spider.process.jiangxi.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/einvperson/queryInfo.do"></property>
+		<property name="nextHandle" ref="jiangxiContextBGXXProcess"></property>
+	</bean>
+	<bean id="jiangxiContextBGXXProcess" class="com.heetian.spider.process.jiangxi.ContextBGXXProcess">
+		<property name="uniqueWebUri" value="/gtalterrecoder/getquerygtalterrecoder.do"></property>
+		<property name="nextHandle" ref="jiangxiContextFZJGProcess"></property>
+	</bean>
+	<bean id="jiangxiContextFZJGProcess" class="com.heetian.spider.process.jiangxi.ContextFZJGProcess">
+		<property name="uniqueWebUri" value="/ebrchinfo/getqueryEBrchinfo.do"></property>
+		<property name="nextHandle" ref="jiangxiContextZYRYProcess"></property>
+	</bean>
+	<bean id="jiangxiContextZYRYProcess" class="com.heetian.spider.process.jiangxi.ContextZYRYProcess">
+		<property name="uniqueWebUri" value="/epriperson/queryPerson.do"></property>
+	</bean>
+<!-- 江西 -->
+
+<!-- 宁夏 -->
+	<bean id="ningxiaHomeProcess" class="com.heetian.spider.process.ningxia.HomeProcess">
+		<property name="host" value="gsxt.ngsh.gov.cn"></property>
+		<property name="referer" value="http://gsxt.ngsh.gov.cn/ECPS/index.jsp"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.NingXia"></property>
+		<property name="nextHandle" ref="ningxiaHomeProcess1"></property>
+		<property name="uniqueWebUri" value="http://gsxt.ngsh.gov.cn/ECPS/index.jsp"></property>
+	</bean>
+	
+	<bean id="ningxiaHomeProcess1" class="com.heetian.spider.process.ningxia.ContexJBXXProcess">
+		<property name="nextHandle" ref="ningxiaDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="/ECPS/qyxxgsAction_initGtjbqk.action"></property>
+	</bean>
+	
+	<bean id="ningxiaDownloadCodeProcess" class="com.heetian.spider.process.ningxia.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="/ECPS/verificationCode.jsp"></property>
+		<property name="nextHandle" ref="ningxiaValidateCodeProcess"></property>
+	</bean>
+	<bean id="ningxiaValidateCodeProcess" class="com.heetian.spider.process.ningxia.ValidateCodeProcess">
+		<property name="uniqueWebUri" value="/ECPS/qyxxgsAction_checkVerificationCode.action"></property>
+		<property name="nextHandle" ref="ningxiaCompanyURLProcess"></property>
+	</bean>
+	<bean id="ningxiaCompanyURLProcess" class="com.heetian.spider.process.ningxia.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/ECPS/qyxxgsAction_queryXyxx.action"></property>
+		<property name="nextHandle" ref="ningxiaContextJBXXProcess"></property>
+	</bean>
+	<bean id="ningxiaContextJBXXProcess" class="com.heetian.spider.process.ningxia.ContexJBXXProcess">
+		<property name="uniqueWebUri" value="/ECPS/qyxxgsAction_initQyjbqk.action"></property>
+		<property name="nextHandle" ref="ningxiaContextBGXXProcess"></property>
+	</bean>
+	<bean id="ningxiaContextBGXXProcess" class="com.heetian.spider.process.ningxia.ContextBGXXProcess">
+		<property name="uniqueWebUri" value="/ECPS/qybgxxAction_init.action"></property>
+		<property name="nextHandle" ref="ningxiaContextFZJGProcess"></property>
+	</bean>
+	<bean id="ningxiaContextFZJGProcess" class="com.heetian.spider.process.ningxia.ContextFZJGProcess">
+		<property name="uniqueWebUri" value="/ECPS/qybaxxAction_fgsxx.action"></property>
+		<property name="nextHandle" ref="ningxiaContextGDXXProcess"></property>
+	</bean>
+	<bean id="ningxiaContextGDXXProcess" class="com.heetian.spider.process.ningxia.ContextGDXXProcess">
+		<property name="uniqueWebUri" value="/ECPS/tzrczxxAction_init.action"></property>
+		<property name="nextHandle" ref="ningxiaContextZYRYProcess"></property>
+	</bean>
+	<bean id="ningxiaContextZYRYProcess" class="com.heetian.spider.process.ningxia.ContextZYRYProcess">
+		<property name="uniqueWebUri" value="/ECPS/qybaxxAction_zyryxx.action"></property>
+		<property name="nextHandle" ref="ningxiaContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="ningxiaContextGDAndCZXXProcess" class="com.heetian.spider.process.ningxia.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/ECPS/tzrczxxAction_tzrczxxxx.action"></property>
+		<property name="nextHandle" ref="ningxiaJBTransitionProcess"></property>
+	</bean>
+	<bean id="ningxiaJBTransitionProcess" class="com.heetian.spider.process.ningxia.JBTransitionProcess">
+		<property name="uniqueWebUri" value="/ECPS/qyxxgsAction_initQyxyxxMain.action"></property>
+		<property name="nextHandle" ref="ningxiaContextBGXXProcess1"></property>
+	</bean>
+	
+	<bean id="ningxiaContextBGXXProcess1" class="com.heetian.spider.process.ningxia.ContextBGXXProcess">
+		<property name="uniqueWebUri" value="qybgxxAction_query.action"></property>
+		<property name="nextHandle" ref="ningxiaContextFZJGProcess1"></property>
+	</bean>
+	<bean id="ningxiaContextFZJGProcess1" class="com.heetian.spider.process.ningxia.ContextFZJGProcess">
+		<property name="uniqueWebUri" value="qybaxxAction_queryFsxx.action"></property>
+		<property name="nextHandle" ref="ningxiaContextGDXXProcess1"></property>
+	</bean>
+	<bean id="ningxiaContextGDXXProcess1" class="com.heetian.spider.process.ningxia.ContextGDXXProcess">
+		<property name="uniqueWebUri" value="tzrczxxAction_query.action"></property>
+		<property name="nextHandle" ref="ningxiaContextZYRYProcess1"></property>
+	</bean>
+	<bean id="ningxiaContextZYRYProcess1" class="com.heetian.spider.process.ningxia.ContextZYRYProcess">
+		<property name="uniqueWebUri" value="qybaxxAction_queryZyryxx.action"></property>
+	</bean>
+<!-- 宁夏 -->
+
+<!-- 贵州 -->
+	<bean id="guizhouHomeProcess" class="com.heetian.spider.process.guizhou.HomeProcess">
+		<property name="host" value="gsxt.gzgs.gov.cn"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.GuiZhou"></property>
+		<property name="nextHandle" ref="guizhouDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.gzgs.gov.cn/?xx=xx"></property>
+	</bean>
+	<bean id="guizhouDownloadCodeProcess" class="com.heetian.spider.process.guizhou.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="search!generateCode.shtml"></property>
+		<property name="nextHandle" ref="guizhouCompanyURLProcess"></property>
+	</bean>
+	<bean id="guizhouCompanyURLProcess" class="com.heetian.spider.process.guizhou.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/query!searchSczt.shtml"></property>
+		<property name="nextHandle" ref="guizhouContextJBXXProcess"></property>
+	</bean>
+	<bean id="guizhouContextJBXXProcess" class="com.heetian.spider.process.guizhou.ContexJBXXProcess">
+		<property name="uniqueWebUri" value="/search!searchData.shtml"></property>
+		<property name="nextHandle" ref="guizhouDetailURLProcess"></property>
+	</bean>
+	<bean id="guizhouDetailURLProcess" class="com.heetian.spider.process.guizhou.DetailURLProcess">
+		<property name="uniqueWebUri" value="/index.jsp"></property>
+		<property name="nextHandle" ref="guizhouDetailGDXXProcess"></property>
+	</bean>
+	<bean id="guizhouDetailGDXXProcess" class="com.heetian.spider.process.guizhou.DetailGDXXProcess">
+		<property name="uniqueWebUri" value="/nzgs/tzrxx.jsp"></property>
+		<property name="nextHandle" ref="guizhouContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="guizhouContextGDAndCZXXProcess" class="com.heetian.spider.process.guizhou.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/nzgs/search!searchTzr.shtml"></property>
+	</bean>
+<!-- 贵州 -->
+
+<!-- 广东 -->
+	<bean id="guangdongHomeProcess" class="com.heetian.spider.process.guangdong.HomeProcess">
+		<property name="host" value="gsxt.gdgs.gov.cn"></property>
+		<property name="referer" value="http://gsxt.gdgs.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.GuangDong"></property>
+		<property name="nextHandle" ref="guangdongDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.gdgs.gov.cn/aiccips/?xxxx"></property>
+	</bean>
+	<bean id="guangdongDownloadCodeProcess" class="com.heetian.spider.process.guangdong.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="/aiccips/verify.html"></property>
+		<property name="nextHandle" ref="guangdongCompanyURLProcess"></property>
+	</bean>
+	<bean id="guangdongCompanyURLProcess" class="com.heetian.spider.process.guangdong.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/CheckEntContext/showInfo.html"></property>
+		<property name="nextHandle" ref="guangdongContextJBXXProcess"></property>
+	</bean>
+	<bean id="guangdongContextJBXXProcess" class="com.heetian.spider.process.guangdong.ContexDJProcess">
+		<property name="uniqueWebUri" value="/GSpublicity/GSpublicityList.html"></property>
+		<property name="nextHandle" ref="guangdongContextJBXXProcess2"></property>
+	</bean>
+	<bean id="guangdongContextJBXXProcess2" class="com.heetian.spider.process.guangdong.ContexDJ2Process">
+		<property name="uniqueWebUri" value="/search/search!entityShow"></property>
+		<property name="nextHandle" ref="guangdongContextJBXXProcess1"></property>
+	</bean>
+	<bean id="guangdongContextJBXXProcess1" class="com.heetian.spider.process.guangdong.ContexDJ1Process">
+		<property name="uniqueWebUri" value="/web/GSZJGSPT/QyxyDetail.aspx"></property>
+		<property name="nextHandle" ref="guangdongDetailURLProcess"></property>
+	</bean>
+	<bean id="guangdongDetailURLProcess" class="com.heetian.spider.process.guangdong.ValidateCodeProcess">
+		<property name="uniqueWebUri" value="/CheckEntContext/checkCode.html"></property>
+		<property name="nextHandle" ref="guangdongContextGDAndCZXXProcess1"></property>
+	</bean>
+	<bean id="guangdongContextGDAndCZXXProcess1" class="com.heetian.spider.process.guangdong.ContextGDAndCZXX1Process">
+		<property name="uniqueWebUri" value="/web/GSZJGSPT/EntSHDetail.aspx"></property>
+		<property name="nextHandle" ref="guangdongContextGDXXProcess"></property>
+	</bean>
+	<bean id="guangdongContextGDXXProcess" class="com.heetian.spider.process.guangdong.ContextGDXXProcess">
+		<property name="uniqueWebUri" value="/GSpublicity/invInfoPage.html"></property>
+		<property name="nextHandle" ref="guangdongContextBGXXProcess"></property>
+	</bean>
+	<bean id="guangdongContextBGXXProcess" class="com.heetian.spider.process.guangdong.ContextBGXXProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/entChaPage"></property>
+		<property name="nextHandle" ref="guangdongContextZYRYProcess"></property>
+	</bean>
+	<bean id="guangdongContextZYRYProcess" class="com.heetian.spider.process.guangdong.ContextZYRYProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/vipInfoPage"></property>
+		<property name="nextHandle" ref="guangdongContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="guangdongContextGDAndCZXXProcess" class="com.heetian.spider.process.guangdong.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/invInfoDetails.html"></property>
+		<property name="nextHandle" ref="guangdongContextFZJGProcess"></property>
+	</bean>
+	<bean id="guangdongContextFZJGProcess" class="com.heetian.spider.process.guangdong.ContextFZJGProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/braInfoPage"></property>
+		<property name="nextHandle" ref="guangdongContextGD2XXProcess"></property>
+	</bean>
+	
+	<bean id="guangdongContextGD2XXProcess" class="com.heetian.spider.process.guangdong.ContextGD2XXProcess">
+		<property name="uniqueWebUri" value="search!investorListShow"></property>
+		<property name="nextHandle" ref="guangdongContextBG2XXProcess"></property>
+	</bean>
+	<bean id="guangdongContextBG2XXProcess" class="com.heetian.spider.process.guangdong.ContextBG2XXProcess">
+		<property name="uniqueWebUri" value="search!changeListShow"></property>
+		<property name="nextHandle" ref="guangdongContextZyry2XXProcess"></property>
+	</bean>
+	<bean id="guangdongContextZyry2XXProcess" class="com.heetian.spider.process.guangdong.ContextZyry2XXProcess">
+		<property name="uniqueWebUri" value="search!staffListShow"></property>
+		<property name="nextHandle" ref="guangdongContextFzjg2XXProcess"></property>
+	</bean>
+	<bean id="guangdongContextFzjg2XXProcess" class="com.heetian.spider.process.guangdong.ContextFzjg2XXProcess">
+		<property name="uniqueWebUri" value="search!branchListShow"></property>
+		<property name="nextHandle" ref="guangdongTimeOutProcess"></property>
+	</bean>
+	<bean id="guangdongTimeOutProcess" class="com.heetian.spider.process.guangdong.TimeOutProcess">
+		<property name="uniqueWebUri" value="/aiccips/timeout/control.html"></property>
+	</bean>
+<!-- 广东 -->
+
+<!-- 海南 -->
+	<bean id="hainanHomeProcess" class="com.heetian.spider.process.hainan.HomeProcess">
+		<property name="host" value="aic.hainan.gov.cn:1888"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.GuangDong"></property>
+		<property name="nextHandle" ref="hainanDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://aic.hainan.gov.cn:1888/aiccips?xx=xx"></property>
+	</bean>
+	<bean id="hainanDownloadCodeProcess" class="com.heetian.spider.process.hainan.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="/aiccips/verify.html"></property>
+		<property name="nextHandle" ref="hainanCompanyURLProcess"></property>
+	</bean>
+	<bean id="hainanCompanyURLProcess" class="com.heetian.spider.process.hainan.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/CheckEntContext/showInfo.html"></property>
+		<property name="nextHandle" ref="hainanContextJBXXProcess"></property>
+	</bean>
+	<bean id="hainanContextJBXXProcess" class="com.heetian.spider.process.hainan.ContexDJProcess">
+		<property name="uniqueWebUri" value="/GSpublicity/GSpublicityList.html"></property>
+		<property name="nextHandle" ref="hainanContextJBXXProcess1"></property>
+	</bean>
+	<bean id="hainanContextJBXXProcess1" class="com.heetian.spider.process.hainan.ContexDJ1Process">
+		<property name="uniqueWebUri" value="/web/GSZJGSPT/QyxyDetail.aspx"></property>
+		<property name="nextHandle" ref="hainanDetailURLProcess"></property>
+	</bean>
+	<bean id="hainanDetailURLProcess" class="com.heetian.spider.process.hainan.ValidateCodeProcess">
+		<property name="uniqueWebUri" value="/CheckEntContext/checkCode.html"></property>
+		<property name="nextHandle" ref="hainanContextGDAndCZXXProcess1"></property>
+	</bean>
+	<bean id="hainanContextGDAndCZXXProcess1" class="com.heetian.spider.process.hainan.ContextGDAndCZXX1Process">
+		<property name="uniqueWebUri" value="/web/GSZJGSPT/EntSHDetail.aspx"></property>
+		<property name="nextHandle" ref="hainanContextGDXXProcess"></property>
+	</bean>
+	<bean id="hainanContextGDXXProcess" class="com.heetian.spider.process.hainan.ContextGDXXProcess">
+		<property name="uniqueWebUri" value="/GSpublicity/invInfoPage.html"></property>
+		<property name="nextHandle" ref="hainanContextBGXXProcess"></property>
+	</bean>
+	<bean id="hainanContextBGXXProcess" class="com.heetian.spider.process.hainan.ContextBGXXProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/entChaPage"></property>
+		<property name="nextHandle" ref="hainanContextZYRYProcess"></property>
+	</bean>
+	<bean id="hainanContextZYRYProcess" class="com.heetian.spider.process.hainan.ContextZYRYProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/vipInfoPage"></property>
+		<property name="nextHandle" ref="hainanContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="hainanContextGDAndCZXXProcess" class="com.heetian.spider.process.hainan.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/invInfoDetails.html"></property>
+		<property name="nextHandle" ref="hainanContextFZJGProcess"></property>
+	</bean>
+	<bean id="hainanContextFZJGProcess" class="com.heetian.spider.process.hainan.ContextFZJGProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/braInfoPage"></property>
+	</bean>
+<!-- 海南 -->
+
+<!-- 内蒙古 -->
+	<bean id="neimengguHomeProcess" class="com.heetian.spider.process.neimenggu.HomeProcess">
+		<property name="host" value="www.nmgs.gov.cn:7001"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.GuangDong"></property>
+		<property name="uniqueWebUri" value="http://www.nmgs.gov.cn:7001/aiccips/?xx=xx"></property>
+		<property name="nextHandle" ref="neimengguDownloadCodeProcess"></property>
+	</bean>
+	<bean id="neimengguDownloadCodeProcess" class="com.heetian.spider.process.neimenggu.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="/aiccips/verify.html"></property>
+		<property name="nextHandle" ref="neimengguCompanyURLProcess"></property>
+	</bean>
+	<bean id="neimengguCompanyURLProcess" class="com.heetian.spider.process.neimenggu.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/CheckEntContext/showInfo.html"></property>
+		<property name="nextHandle" ref="neimengguContextJBXXProcess"></property>
+	</bean>
+	<bean id="neimengguContextJBXXProcess" class="com.heetian.spider.process.neimenggu.ContexDJProcess">
+		<property name="uniqueWebUri" value="/GSpublicity/GSpublicityList.html"></property>
+		<property name="nextHandle" ref="neimengguContextJBXXProcess1"></property>
+	</bean>
+	<bean id="neimengguContextJBXXProcess1" class="com.heetian.spider.process.neimenggu.ContexDJ1Process">
+		<property name="uniqueWebUri" value="/web/GSZJGSPT/QyxyDetail.aspx"></property>
+		<property name="nextHandle" ref="neimengguDetailURLProcess"></property>
+	</bean>
+	<bean id="neimengguDetailURLProcess" class="com.heetian.spider.process.neimenggu.ValidateCodeProcess">
+		<property name="uniqueWebUri" value="/CheckEntContext/checkCode.html"></property>
+		<property name="nextHandle" ref="neimengguContextGDAndCZXXProcess1"></property>
+	</bean>
+	<bean id="neimengguContextGDAndCZXXProcess1" class="com.heetian.spider.process.neimenggu.ContextGDAndCZXX1Process">
+		<property name="uniqueWebUri" value="/web/GSZJGSPT/EntSHDetail.aspx"></property>
+		<property name="nextHandle" ref="neimengguContextGDXXProcess"></property>
+	</bean>
+	<bean id="neimengguContextGDXXProcess" class="com.heetian.spider.process.neimenggu.ContextGDXXProcess">
+		<property name="uniqueWebUri" value="/GSpublicity/invInfoPage.html"></property>
+		<property name="nextHandle" ref="neimengguContextBGXXProcess"></property>
+	</bean>
+	<bean id="neimengguContextBGXXProcess" class="com.heetian.spider.process.neimenggu.ContextBGXXProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/entChaPage"></property>
+		<property name="nextHandle" ref="neimengguContextZYRYProcess"></property>
+	</bean>
+	<bean id="neimengguContextZYRYProcess" class="com.heetian.spider.process.neimenggu.ContextZYRYProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/vipInfoPage"></property>
+		<property name="nextHandle" ref="neimengguContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="neimengguContextGDAndCZXXProcess" class="com.heetian.spider.process.neimenggu.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/invInfoDetails.html"></property>
+		<property name="nextHandle" ref="neimengguContextFZJGProcess"></property>
+	</bean>
+	<bean id="neimengguContextFZJGProcess" class="com.heetian.spider.process.neimenggu.ContextFZJGProcess">
+		<property name="uniqueWebUri" value="/aiccips/GSpublicity/braInfoPage"></property>
+	</bean>
+<!-- 内蒙古 -->
+
+<!-- 浙江 -->
+	<bean id="zhejiangHomeProcess" class="com.heetian.spider.process.zhejiang.HomeProcess">
+		<property name="host" value="gsxt.zjaic.gov.cn"></property>
+		<property name="referer" value="http://gsxt.zjaic.gov.cn/zhejiang.jsp"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.ZheJiang"></property>
+		<property name="nextHandle" ref="zhejiangDownloadCodeProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.zjaic.gov.cn/zhejiang.jsp"></property>
+	</bean>
+	<bean id="zhejiangDownloadCodeProcess" class="com.heetian.spider.process.zhejiang.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="/common/captcha/doReadKaptcha.do"></property>
+		<property name="nextHandle" ref="zhejiangValidateCodeProcess"></property>
+	</bean>
+	<bean id="zhejiangValidateCodeProcess" class="com.heetian.spider.process.zhejiang.ValidateCodeProcess">
+		<property name="uniqueWebUri" value="/search/doValidatorVerifyCode.do"></property>
+		<property name="nextHandle" ref="zhejiangCompanyURLProcess"></property>
+	</bean>
+	<bean id="zhejiangCompanyURLProcess" class="com.heetian.spider.process.zhejiang.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/search/doGetAppSearchResult.do"></property>
+		<property name="nextHandle" ref="zhejiangContexDJProcess"></property>
+	</bean>
+	<bean id="zhejiangContexDJProcess" class="com.heetian.spider.process.zhejiang.ContexDJProcess">
+		<property name="uniqueWebUri" value="/appbasicinfo/doReadAppBasicInfo.do"></property>
+		<property name="nextHandle" ref="zhejiangContexBAProcess"></property>
+	</bean>
+	<bean id="zhejiangContexBAProcess" class="com.heetian.spider.process.zhejiang.ContexBAProcess">
+		<property name="uniqueWebUri" value="/filinginfo/doViewFilingInfo.do"></property>
+		<property name="nextHandle" ref="zhejiangContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="zhejiangContextGDAndCZXXProcess" class="com.heetian.spider.process.zhejiang.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="xxx"></property>
+	</bean>
+<!-- 浙江 -->
+<!-- 河北 -->
+	<bean id="hebeiHomeProcess" class="com.heetian.spider.process.hebei.HomeProcess">
+		<property name="host" value="www.hebscztxyxx.gov.cn"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="nextHandle" ref="hebeiCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="http://www.hebscztxyxx.gov.cn/notice/?xx=xx"></property>
+	</bean>
+	<bean id="hebeiCompanyURLProcess" class="com.heetian.spider.process.hebei.CompanyURLProcess">
+		<property name="uniqueWebUri" value="http://www.hebscztxyxx.gov.cn/notice/search/ent_info_list"></property>
+		<property name="nextHandle" ref="hebeiContexJBXXProcess"></property>
+	</bean>
+	<bean id="hebeiContexJBXXProcess" class="com.heetian.spider.process.hebei.ContexJBXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view?uuid"></property>
+		<property name="nextHandle" ref="hebeiContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="hebeiContextGDAndCZXXProcess" class="com.heetian.spider.process.hebei.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view_initiator"></property>
+		<property name="nextHandle" ref="hebeiContextGDAndCZXXProcess1"></property>
+	</bean>
+	<bean id="hebeiContextGDAndCZXXProcess1" class="com.heetian.spider.process.hebei.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view_investor"></property>
+	</bean>
+<!-- 河北 -->
+
+<!-- 工商总局 -->
+	<bean id="admisHomeProcess" class="com.heetian.spider.process.administrator.HomeProcess">
+		<property name="host" value="gsxt.saic.gov.cn"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="nextHandle" ref="admisCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.saic.gov.cn/zjgs/?xx=xx"></property>
+	</bean>
+	<bean id="admisCompanyURLProcess" class="com.heetian.spider.process.administrator.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/zjgs/search/ent_info_list"></property>
+		<property name="nextHandle" ref="admisContexJBXXProcess"></property>
+	</bean>
+	<bean id="admisContexJBXXProcess" class="com.heetian.spider.process.administrator.ContexJBXXProcess">
+		<property name="uniqueWebUri" value="/zjgs/notice/view?uuid"></property>
+		<property name="nextHandle" ref="admisContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="admisContextGDAndCZXXProcess" class="com.heetian.spider.process.administrator.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/zjgs/notice/view_initiator"></property>
+		<property name="nextHandle" ref="admisContextGDAndCZXXProcess1"></property>
+	</bean>
+	<bean id="admisContextGDAndCZXXProcess1" class="com.heetian.spider.process.administrator.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/zjgs/notice/view_investor"></property>
+	</bean>
+<!-- 工商总局 -->
+<!-- 上海 -->
+	<bean id="shanghaiHomeProcess" class="com.heetian.spider.process.shanghai.HomeProcess">
+		<property name="host" value="www.sgs.gov.cn"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="uniqueWebUri" value="https://www.sgs.gov.cn/notice/home"></property>
+		<property name="nextHandle" ref="shanghaiCompanyURLProcess"></property>
+	</bean>
+	<bean id="shanghaiCompanyURLProcess" class="com.heetian.spider.process.shanghai.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/notice/search/ent_info_list"></property>
+		<property name="nextHandle" ref="shanghaiContexJBXXProcess"></property>
+	</bean>
+	<bean id="shanghaiContexJBXXProcess" class="com.heetian.spider.process.shanghai.ContexJBXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view?uuid"></property>
+		<property name="nextHandle" ref="shanghaiContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="shanghaiContextGDAndCZXXProcess" class="com.heetian.spider.process.shanghai.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view_initiator"></property>
+		<property name="nextHandle" ref="shanghaiContextGDAndCZXXProcess1"></property>
+	</bean>
+	<bean id="shanghaiContextGDAndCZXXProcess1" class="com.heetian.spider.process.shanghai.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view_investor"></property>
+	</bean>
+<!-- 上海 -->
+<!-- 湖南 -->
+	<bean id="hunanHomeProcess" class="com.heetian.spider.process.hunan.HomeProcess">
+		<property name="host" value="gsxt.hnaic.gov.cn"></property>
+		<property name="referer" value="http://gsxt.hnaic.gov.cn/"></property>
+		<property name="nextHandle" ref="hunanCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.hnaic.gov.cn/notice/?aa=aa"></property>
+	</bean>
+	<bean id="hunanCompanyURLProcess" class="com.heetian.spider.process.hunan.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/notice/search/ent_info_list"></property>
+		<property name="nextHandle" ref="hunanContexJBXXProcess"></property>
+	</bean>
+	<bean id="hunanContexJBXXProcess" class="com.heetian.spider.process.hunan.ContexJBXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view?uuid"></property>
+		<property name="nextHandle" ref="hunanContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="hunanContextGDAndCZXXProcess" class="com.heetian.spider.process.hunan.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view_initiator"></property>
+		<property name="nextHandle" ref="hunanContextGDAndCZXXProcess1"></property>
+	</bean>
+	<bean id="hunanContextGDAndCZXXProcess1" class="com.heetian.spider.process.hunan.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view_investor"></property>
+	</bean>
+<!-- 湖南 -->
+<!-- 福建 -->
+	<bean id="fujianHomeProcess" class="com.heetian.spider.process.fujian.HomeProcess">
+		<property name="host" value="wsgs.fjaic.gov.cn"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="nextHandle" ref="fujianCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="http://wsgs.fjaic.gov.cn/creditpub/home"></property>
+	</bean>
+	<bean id="fujianCompanyURLProcess" class="com.heetian.spider.process.fujian.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/creditpub/search/ent_info_list"></property>
+		<property name="nextHandle" ref="fujianContexJBXXProcess"></property>
+	</bean>
+	<bean id="fujianContexJBXXProcess" class="com.heetian.spider.process.fujian.ContexJBXXProcess">
+		<property name="uniqueWebUri" value="/creditpub/notice/view?uuid"></property>
+		<property name="nextHandle" ref="fujianContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="fujianContextGDAndCZXXProcess" class="com.heetian.spider.process.fujian.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/creditpub/notice/view_initiator"></property>
+		<property name="nextHandle" ref="fujianContextGDAndCZXXProcess1"></property>
+	</bean>
+	<bean id="fujianContextGDAndCZXXProcess1" class="com.heetian.spider.process.fujian.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/creditpub/notice/view_investor"></property>
+	</bean>
+<!-- 福建 -->
+<!-- 云南 -->
+	<bean id="yunnanHomeProcess" class="com.heetian.spider.process.yunnan.HomeProcess">
+		<property name="host" value="gsxt.ynaic.gov.cn"></property>
+		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
+		<property name="nextHandle" ref="yunnanCompanyURLProcess"></property>
+		<property name="uniqueWebUri" value="http://gsxt.ynaic.gov.cn/notice/?xx=xx"></property>
+	</bean>
+	<bean id="yunnanCompanyURLProcess" class="com.heetian.spider.process.yunnan.CompanyURLProcess">
+		<property name="uniqueWebUri" value="/notice/search/ent_info_list"></property>
+		<property name="nextHandle" ref="yunnanContexJBXXProcess"></property>
+	</bean>
+	<bean id="yunnanContexJBXXProcess" class="com.heetian.spider.process.yunnan.ContexJBXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view?uuid"></property>
+		<property name="nextHandle" ref="yunnanContextGDAndCZXXProcess"></property>
+	</bean>
+	<bean id="yunnanContextGDAndCZXXProcess" class="com.heetian.spider.process.yunnan.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view_initiator"></property>
+		<property name="nextHandle" ref="yunnanContextGDAndCZXXProcess1"></property>
+	</bean>
+	<bean id="yunnanContextGDAndCZXXProcess1" class="com.heetian.spider.process.yunnan.ContextGDAndCZXXProcess">
+		<property name="uniqueWebUri" value="/notice/notice/view_investor"></property>
+	</bean>
+<!-- 云南 -->
+</beans>

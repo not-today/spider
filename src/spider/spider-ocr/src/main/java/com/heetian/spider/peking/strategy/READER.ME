@@ -1,0 +1,21 @@
+##############################接口实现########################################
+实现接口com.heetian.spider.peking.strategy.Recognized的recognition(String picName,String picType)方法，picName为验证码名称，picType为图片类型，方法内部实现，验证码图片的路径是在download类中已经指定的。
+##############################配置文件########################################
+#识别程序入口类(即上面实现的类)的配置recognized_序号_xxxx=类全名,以下为测试类
+recognized_jinan=com.heetian.spider.peking.strategy.JiNan
+recognized_peking=com.heetian.spider.peking.strategy.Peking
+recognized_shanghai=com.heetian.spider.peking.strategy.ShangHai
+#当前使用的识别程序id,必须从1开始进行编号,最大编号与number字段相同
+currentId=1
+#最大错误数
+maxError=3
+#当前识别程序的当前错误数
+currentError=0
+
+##############################使用方式########################################
+com.heetian.spider.peking.strategy.RecognizedContext类：
+recognized：验证码识别调用的方法，参数与上面接口的参数一致
+updateCurrentError：识别完成的验证码结果对与错的更新方法
+
+
+

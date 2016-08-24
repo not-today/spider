@@ -1,0 +1,1 @@
+[ERROR] [2016-08-12 08:56:02.248] [Logging.scala : 97] - [ConsumerFetcherThread-192.168.201.206_tst-pc-1470963360031-5b9ed72f-0-0], Current offset 635 for partition [TOPIC_QYDATA_SEED1,0] out of range; reset offset to 650

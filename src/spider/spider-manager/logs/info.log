@@ -1,0 +1,98 @@
+[ INFO] [2016-08-24 10:33:24.686] [Logging.scala : 68] - Verifying properties
+[ INFO] [2016-08-24 10:33:24.780] [Logging.scala : 68] - Property auto.commit.enable is overridden to true
+[ INFO] [2016-08-24 10:33:24.781] [Logging.scala : 68] - Property auto.commit.interval.ms is overridden to 4000
+[ INFO] [2016-08-24 10:33:24.782] [Logging.scala : 68] - Property auto.offset.reset is overridden to smallest
+[ INFO] [2016-08-24 10:33:24.782] [Logging.scala : 68] - Property group.id is overridden to 192.168.201.206
+[ INFO] [2016-08-24 10:33:24.783] [Logging.scala : 68] - Property zookeeper.connect is overridden to 192.168.199.44:2181
+[ INFO] [2016-08-24 10:33:24.784] [Logging.scala : 68] - Property zookeeper.session.timeout.ms is overridden to 5000
+[ INFO] [2016-08-24 10:33:24.789] [Logging.scala : 68] - Property zookeeper.sync.time.ms is overridden to 2000
+[ INFO] [2016-08-24 10:33:25.004] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], Connecting to zookeeper instance at 192.168.199.44:2181
+[ INFO] [2016-08-24 10:33:25.046] [ZkEventThread.java : 64] - Starting ZkClient event thread.
+[ INFO] [2016-08-24 10:33:25.338] [ZkClient.java : 449] - zookeeper state changed (SyncConnected)
+[ INFO] [2016-08-24 10:33:25.427] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], starting auto committer every 4000 ms
+[ INFO] [2016-08-24 10:33:25.557] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], begin registering consumer 192.168.201.206_tst-pc-1472006005001-c34fdad3 in ZK
+[ INFO] [2016-08-24 10:33:25.722] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], end registering consumer 192.168.201.206_tst-pc-1472006005001-c34fdad3 in ZK
+[ INFO] [2016-08-24 10:33:25.757] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], starting watcher executor thread for consumer 192.168.201.206_tst-pc-1472006005001-c34fdad3
+[ INFO] [2016-08-24 10:33:26.138] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], begin rebalancing consumer 192.168.201.206_tst-pc-1472006005001-c34fdad3 try #0
+[ INFO] [2016-08-24 10:33:26.842] [Logging.scala : 68] - [ConsumerFetcherManager-1472006005415] Stopping leader finder thread
+[ INFO] [2016-08-24 10:33:26.843] [Logging.scala : 68] - [ConsumerFetcherManager-1472006005415] Stopping all fetchers
+[ INFO] [2016-08-24 10:33:26.847] [Logging.scala : 68] - [ConsumerFetcherManager-1472006005415] All connections stopped
+[ INFO] [2016-08-24 10:33:26.850] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], Cleared all relevant queues for this fetcher
+[ INFO] [2016-08-24 10:33:26.854] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], Cleared the data chunks in all the consumer message iterators
+[ INFO] [2016-08-24 10:33:26.857] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], Committing all offsets after clearing the fetcher queues
+[ INFO] [2016-08-24 10:33:26.861] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], Releasing partition ownership
+[ INFO] [2016-08-24 10:33:27.178] [Logging.scala : 68] - Consumer 192.168.201.206_tst-pc-1472006005001-c34fdad3 rebalancing the following partitions: ArrayBuffer(0) for topic TOPIC_QYDATA_SEED1 with consumers: List(192.168.201.206_tst-pc-1472006005001-c34fdad3-0)
+[ INFO] [2016-08-24 10:33:27.183] [Logging.scala : 68] - 192.168.201.206_tst-pc-1472006005001-c34fdad3-0 attempting to claim partition 0
+[ INFO] [2016-08-24 10:33:27.325] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], 192.168.201.206_tst-pc-1472006005001-c34fdad3-0 successfully owned partition 0 for topic TOPIC_QYDATA_SEED1
+[ INFO] [2016-08-24 10:33:27.478] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], Consumer 192.168.201.206_tst-pc-1472006005001-c34fdad3 selected partitions : TOPIC_QYDATA_SEED1:0: fetched offset = 690: consumed offset = 690
+[ INFO] [2016-08-24 10:33:27.487] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3-leader-finder-thread], Starting 
+[ INFO] [2016-08-24 10:33:27.488] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006005001-c34fdad3], end rebalancing consumer 192.168.201.206_tst-pc-1472006005001-c34fdad3 try #0
+[ INFO] [2016-08-24 10:33:27.633] [Logging.scala : 68] - Verifying properties
+[ INFO] [2016-08-24 10:33:27.635] [Logging.scala : 68] - Property client.id is overridden to 192.168.201.206
+[ INFO] [2016-08-24 10:33:27.635] [Logging.scala : 68] - Property metadata.broker.list is overridden to 192.168.199.44:9092
+[ INFO] [2016-08-24 10:33:27.635] [Logging.scala : 68] - Property request.timeout.ms is overridden to 30000
+[ INFO] [2016-08-24 10:33:27.683] [Logging.scala : 68] - Fetching metadata from broker id:0,host:192.168.199.44,port:9092 with correlation id 0 for 1 topic(s) Set(TOPIC_QYDATA_SEED1)
+[ INFO] [2016-08-24 10:33:27.733] [Logging.scala : 68] - Connected to 192.168.199.44:9092 for producing
+[ INFO] [2016-08-24 10:33:27.826] [Logging.scala : 68] - Disconnecting from 192.168.199.44:9092
+[ INFO] [2016-08-24 10:33:27.870] [Logging.scala : 68] - [ConsumerFetcherThread-192.168.201.206_tst-pc-1472006005001-c34fdad3-0-0], Starting 
+[ INFO] [2016-08-24 10:33:27.876] [Logging.scala : 68] - [ConsumerFetcherManager-1472006005415] Added fetcher for partitions ArrayBuffer([[TOPIC_QYDATA_SEED1,0], initOffset 690 to broker id:0,host:192.168.199.44,port:9092] )
+[ INFO] [2016-08-24 10:33:37.713] [AbstractApplicationContext.java : 510] - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@3b1658c5: startup date [Wed Aug 24 10:33:37 CST 2016]; root of context hierarchy
+[ INFO] [2016-08-24 10:33:37.776] [XmlBeanDefinitionReader.java : 317] - Loading XML bean definitions from class path resource [applicationContext.xml]
+[ INFO] [2016-08-24 10:33:53.193] [Logging.scala : 68] - Verifying properties
+[ INFO] [2016-08-24 10:33:53.240] [Logging.scala : 68] - Property auto.commit.enable is overridden to true
+[ INFO] [2016-08-24 10:33:53.241] [Logging.scala : 68] - Property auto.commit.interval.ms is overridden to 4000
+[ INFO] [2016-08-24 10:33:53.241] [Logging.scala : 68] - Property auto.offset.reset is overridden to smallest
+[ INFO] [2016-08-24 10:33:53.242] [Logging.scala : 68] - Property group.id is overridden to 192.168.201.206
+[ INFO] [2016-08-24 10:33:53.242] [Logging.scala : 68] - Property zookeeper.connect is overridden to 192.168.199.44:2181
+[ INFO] [2016-08-24 10:33:53.242] [Logging.scala : 68] - Property zookeeper.session.timeout.ms is overridden to 5000
+[ INFO] [2016-08-24 10:33:53.243] [Logging.scala : 68] - Property zookeeper.sync.time.ms is overridden to 2000
+[ INFO] [2016-08-24 10:33:53.369] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], Connecting to zookeeper instance at 192.168.199.44:2181
+[ INFO] [2016-08-24 10:33:53.385] [ZkEventThread.java : 64] - Starting ZkClient event thread.
+[ INFO] [2016-08-24 10:33:53.536] [ZkClient.java : 449] - zookeeper state changed (SyncConnected)
+[ INFO] [2016-08-24 10:33:53.550] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], starting auto committer every 4000 ms
+[ INFO] [2016-08-24 10:33:53.605] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], begin registering consumer 192.168.201.206_tst-pc-1472006033367-bc5a0db2 in ZK
+[ INFO] [2016-08-24 10:33:53.718] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], end registering consumer 192.168.201.206_tst-pc-1472006033367-bc5a0db2 in ZK
+[ INFO] [2016-08-24 10:33:53.727] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], starting watcher executor thread for consumer 192.168.201.206_tst-pc-1472006033367-bc5a0db2
+[ INFO] [2016-08-24 10:33:53.911] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], begin rebalancing consumer 192.168.201.206_tst-pc-1472006033367-bc5a0db2 try #0
+[ INFO] [2016-08-24 10:33:54.362] [Logging.scala : 68] - [ConsumerFetcherManager-1472006033544] Stopping leader finder thread
+[ INFO] [2016-08-24 10:33:54.364] [Logging.scala : 68] - [ConsumerFetcherManager-1472006033544] Stopping all fetchers
+[ INFO] [2016-08-24 10:33:54.368] [Logging.scala : 68] - [ConsumerFetcherManager-1472006033544] All connections stopped
+[ INFO] [2016-08-24 10:33:54.370] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], Cleared all relevant queues for this fetcher
+[ INFO] [2016-08-24 10:33:54.373] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], Cleared the data chunks in all the consumer message iterators
+[ INFO] [2016-08-24 10:33:54.374] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], Committing all offsets after clearing the fetcher queues
+[ INFO] [2016-08-24 10:33:54.376] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], Releasing partition ownership
+[ INFO] [2016-08-24 10:33:54.666] [Logging.scala : 68] - Consumer 192.168.201.206_tst-pc-1472006033367-bc5a0db2 rebalancing the following partitions: ArrayBuffer(0) for topic TOPIC_QYDATA_SEED1 with consumers: List(192.168.201.206_tst-pc-1472006033367-bc5a0db2-0)
+[ INFO] [2016-08-24 10:33:54.669] [Logging.scala : 68] - 192.168.201.206_tst-pc-1472006033367-bc5a0db2-0 attempting to claim partition 0
+[ INFO] [2016-08-24 10:33:54.806] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], 192.168.201.206_tst-pc-1472006033367-bc5a0db2-0 successfully owned partition 0 for topic TOPIC_QYDATA_SEED1
+[ INFO] [2016-08-24 10:33:54.837] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], Consumer 192.168.201.206_tst-pc-1472006033367-bc5a0db2 selected partitions : TOPIC_QYDATA_SEED1:0: fetched offset = 692: consumed offset = 692
+[ INFO] [2016-08-24 10:33:54.842] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2-leader-finder-thread], Starting 
+[ INFO] [2016-08-24 10:33:54.846] [Logging.scala : 68] - [192.168.201.206_tst-pc-1472006033367-bc5a0db2], end rebalancing consumer 192.168.201.206_tst-pc-1472006033367-bc5a0db2 try #0
+[ INFO] [2016-08-24 10:33:54.972] [Logging.scala : 68] - Verifying properties
+[ INFO] [2016-08-24 10:33:54.973] [Logging.scala : 68] - Property client.id is overridden to 192.168.201.206
+[ INFO] [2016-08-24 10:33:54.981] [Logging.scala : 68] - Property metadata.broker.list is overridden to 192.168.199.44:9092
+[ INFO] [2016-08-24 10:33:54.982] [Logging.scala : 68] - Property request.timeout.ms is overridden to 30000
+[ INFO] [2016-08-24 10:33:55.019] [Logging.scala : 68] - Fetching metadata from broker id:0,host:192.168.199.44,port:9092 with correlation id 0 for 1 topic(s) Set(TOPIC_QYDATA_SEED1)
+[ INFO] [2016-08-24 10:33:55.077] [Logging.scala : 68] - Connected to 192.168.199.44:9092 for producing
+[ INFO] [2016-08-24 10:33:55.154] [Logging.scala : 68] - Disconnecting from 192.168.199.44:9092
+[ INFO] [2016-08-24 10:33:55.178] [Logging.scala : 68] - [ConsumerFetcherThread-192.168.201.206_tst-pc-1472006033367-bc5a0db2-0-0], Starting 
+[ INFO] [2016-08-24 10:33:55.183] [Logging.scala : 68] - [ConsumerFetcherManager-1472006033544] Added fetcher for partitions ArrayBuffer([[TOPIC_QYDATA_SEED1,0], initOffset 692 to broker id:0,host:192.168.199.44,port:9092] )
+[ INFO] [2016-08-24 10:44:05.805] [AbstractApplicationContext.java : 510] - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@448d5308: startup date [Wed Aug 24 10:44:05 CST 2016]; root of context hierarchy
+[ INFO] [2016-08-24 10:44:05.851] [XmlBeanDefinitionReader.java : 317] - Loading XML bean definitions from class path resource [applicationContext.xml]
+[ INFO] [2016-08-24 10:45:56.138] [Logging.scala : 68] - Verifying properties
+[ INFO] [2016-08-24 10:45:56.138] [Logging.scala : 68] - Property metadata.broker.list is overridden to 192.168.199.44:9092
+[ INFO] [2016-08-24 10:45:56.139] [Logging.scala : 68] - Property request.required.acks is overridden to -1
+[ INFO] [2016-08-24 10:45:56.139] [Logging.scala : 68] - Property serializer.class is overridden to kafka.serializer.StringEncoder
+[ INFO] [2016-08-24 10:45:56.226] [Logging.scala : 68] - Fetching metadata from broker id:0,host:192.168.199.44,port:9092 with correlation id 0 for 1 topic(s) Set(TOPIC_QYDATA_SEED2)
+[ INFO] [2016-08-24 10:45:56.273] [Logging.scala : 68] - Connected to 192.168.199.44:9092 for producing
+[ INFO] [2016-08-24 10:45:56.320] [Logging.scala : 68] - Disconnecting from 192.168.199.44:9092
+[ INFO] [2016-08-24 10:45:56.411] [Logging.scala : 68] - Connected to 192.168.199.44:9092 for producing
+[ INFO] [2016-08-24 10:45:56.558] [Logging.scala : 68] - Fetching metadata from broker id:0,host:192.168.199.44,port:9092 with correlation id 3 for 1 topic(s) Set(TOPIC_QYDATA_SOURCE)
+[ INFO] [2016-08-24 10:45:56.605] [Logging.scala : 68] - Connected to 192.168.199.44:9092 for producing
+[ INFO] [2016-08-24 10:45:56.652] [Logging.scala : 68] - Disconnecting from 192.168.199.44:9092
+[ INFO] [2016-08-24 10:45:56.652] [Logging.scala : 68] - Disconnecting from 192.168.199.44:9092
+[ INFO] [2016-08-24 10:45:56.701] [Logging.scala : 68] - Connected to 192.168.199.44:9092 for producing
+[ INFO] [2016-08-24 10:59:12.672] [Logging.scala : 68] - Fetching metadata from broker id:0,host:192.168.199.44,port:9092 with correlation id 19 for 2 topic(s) Set(TOPIC_QYDATA_SOURCE, TOPIC_QYDATA_SEED2)
+[ INFO] [2016-08-24 10:59:12.723] [Logging.scala : 68] - Connected to 192.168.199.44:9092 for producing
+[ INFO] [2016-08-24 10:59:12.770] [Logging.scala : 68] - Disconnecting from 192.168.199.44:9092
+[ INFO] [2016-08-24 10:59:12.770] [Logging.scala : 68] - Disconnecting from 192.168.199.44:9092
+[ INFO] [2016-08-24 10:59:12.817] [Logging.scala : 68] - Connected to 192.168.199.44:9092 for producing

@@ -1,0 +1,30 @@
+<hazelcast-client xsi:schemaLocation=
+    "http://www.hazelcast.com/schema/client-config hazelcast-client-config-3.6.xsd"
+                  xmlns="http://www.hazelcast.com/schema/client-config"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <!--Cluster name to connect-->
+    <group>
+        <!-- <name>qysudu_mmdb</name>
+        <password>mmdb_pwd</password> -->
+        <name>wifi_Test</name>
+        <password>wifi_Test</password>
+    </group>
+
+    <!--client properties
+    <properties>
+        <property name="hazelcast.client.connection.timeout">10000</property>
+        <property name="hazelcast.client.retry.count">6</property>
+    </properties>
+-->
+    <!--Network configuration details-->
+    <network>
+        <cluster-members>
+            <address>192.168.199.56</address>
+            <address>192.168.199.58</address>
+            <!-- <address>192.168.99.71</address> -->
+        </cluster-members>
+    </network>
+
+
+</hazelcast-client>

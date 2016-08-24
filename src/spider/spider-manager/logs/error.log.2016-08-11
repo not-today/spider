@@ -1,0 +1,7 @@
+[ERROR] [2016-08-11 13:34:05.787] [Logging.scala : 97] - [ConsumerFetcherThread-192.168.201.208_tst-pc-1470893643585-de6552c4-0-0], Current offset 595 for partition [TOPIC_QYDATA_SEED1,0] out of range; reset offset to 636
+[ERROR] [2016-08-11 14:24:47.683] [ZkEventThread.java : 77] - Error handling event ZkEvent[New session event sent to kafka.consumer.ZookeeperConsumerConnector$ZKSessionExpireListener@3f0ae1f9]
+kafka.common.ConsumerRebalanceFailedException: 192.168.201.208_tst-pc-1470896479763-f4a26990 can't rebalance after 4 retries
+	at kafka.consumer.ZookeeperConsumerConnector$ZKRebalancerListener.syncedRebalance(ZookeeperConsumerConnector.scala:633)
+	at kafka.consumer.ZookeeperConsumerConnector$ZKSessionExpireListener.handleNewSession(ZookeeperConsumerConnector.scala:487)
+	at org.I0Itec.zkclient.ZkClient$4.run(ZkClient.java:472)
+	at org.I0Itec.zkclient.ZkEventThread.run(ZkEventThread.java:71)
