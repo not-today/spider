@@ -11,6 +11,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
 
+import com.heetian.spider.component.EnterUrls;
 import com.heetian.spider.dbcp.bean.GsgsShareholder;
 import com.heetian.spider.process.abstractclass.ProcessHandle;
 import com.heetian.spider.utils.AnalysisForTable;
@@ -31,7 +32,7 @@ public class GDBean {
 	public void setData(List<GdData> data) {
 		this.data = data;
 	}
-	public List<GsgsShareholder> getgd(Page page, Site site, String entnameflag, String regnumberflag, String namevaluepairflag) {
+	public List<GsgsShareholder> getgd(String nbxh, Page page, Site site, String entnameflag, String regnumberflag, String namevaluepairflag) {
 		if(data==null||data.size()<=0)
 			return null;
 		String entName = (String) page.getRequest().getExtra(entnameflag);
@@ -45,21 +46,15 @@ public class GDBean {
 				
 			}else{
 				s.setUuid(uuid);
-				String tzr_nbxh = (String) page.getRequest().getExtra("nbxhflag");
 				NameValuePair[] nvps = {
-				  /*tzr_nbxh:"c9c55194de5b402b1516a2123c2c276f63c501f97d9eebb31aeeb2e2e0d237ab"
-					tzr_czmc:"贵州茅台酒厂（集团）保健酒业有限公司"
-					nbxh:"c9c55194de5b402b1516a2123c2c276f63c501f97d9eebb31aeeb2e2e0d237ab"
-					qymc:"贵州茅台酒厂（集团）白金酒有限责任公司"
-					zch:"520000000120008"*/
-					new BasicNameValuePair("tzr_nbxh", tzr_nbxh),
-					new BasicNameValuePair("tzr_czmc", d.getCzmc()),
-					new BasicNameValuePair("nbxh", tzr_nbxh),
-					new BasicNameValuePair("qymc", entName),
-					new BasicNameValuePair("zch", regNumber)
+					new BasicNameValuePair("c", "2"),
+					new BasicNameValuePair("t", "4"),
+					new BasicNameValuePair("nbxh", nbxh),
+					new BasicNameValuePair("czmc", d.getCzmc()),
+					new BasicNameValuePair("type", "gdxq")
 				};
 				Request request = new Request();
-				request.setUrl("http://"+site.getDomain()+"/nzgs/tzrxx.jsp"+"?"+Math.random()+"&"+Math.random());
+				request.setUrl("http://gsxt.gzgs.gov.cn"+EnterUrls.GZGdxq+"?"+Math.random()+"&"+Math.random());
 				request.setMethod(Method.POST);
 				request.putExtra(regnumberflag, regNumber);
 				request.putExtra(entnameflag, entName);

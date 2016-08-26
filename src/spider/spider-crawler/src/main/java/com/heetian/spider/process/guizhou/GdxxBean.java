@@ -35,15 +35,17 @@ public class GdxxBean {
 		for(GdxxData zyb:data){
 			GsgsShareholderDetail gdxq = new GsgsShareholderDetail();
 			gdxq.setRegNumber(regNumber);
+			gdxq.setUuid(uuid);
 			gdxq.setName(zyb.getCzmc());
 			gdxq.setInvType(zyb.getTzrlxmc());
+			gdxq.setStmn(zyb.getRjcze1());
+			gdxq.setPtmn(zyb.getSjcze1());
 			gdxq.setSd(zyb.getRjczrq());
 			gdxq.setSmn(zyb.getRjcze());
 			gdxq.setSfrm(zyb.getRjczfsmc());
 			gdxq.setPd(zyb.getSjczrq());
 			gdxq.setPmn(zyb.getSjcze());
 			gdxq.setPfrm(zyb.getSjczfsmc());
-			gdxq.setUuid(uuid);
 			gdxqs.add(gdxq);
 		}
 		if(gdxqs.size()<=0)
@@ -53,22 +55,47 @@ public class GdxxBean {
 }
 
 class GdxxData{
-	/*sjczfsmc:null;
-	tzrlxmc:"法人股东";
-	rjczfsmc:"货币                                                        ";
-	sjczrq:null;
-	rjcze:"12000 万元人民币";
-	sjcze:null;
-	czmc:"贵州茅台酒厂（集团）保健酒业有限公司";
-	rjczrq:"2013年5月6日";*/
-	private String sjczfsmc;
-	private String tzrlxmc;
-	private String rjczfsmc;
-	private String sjczrq;
-	private String rjcze;
-	private String sjcze;
-	private String czmc;
-	private String rjczrq;
+	/**
+	 * sjczfsmc;货币,
+	 */
+	private String sjczfsmc; 
+	/**
+	 * tzrlxmc;自然人股东,
+	 */
+	private String tzrlxmc;  
+	/**
+	 * rjczfsmc;货币,
+	 */
+	private String rjczfsmc;  
+	/**
+	 * sjcze1;45 万人民币元,
+	 */
+	private String sjcze1;  
+	/**
+	 * sjczrq;null,
+	 */
+	private String sjczrq;  
+	/**
+	 * rjcze;45 万人民币元,
+	 */
+	private String rjcze;  
+	/**
+	 * sjcze;45 万人民币元,
+	 */
+	private String sjcze;  
+	/**
+	 * rjcze1;45 万人民币元,
+	 */
+	private String rjcze1;  
+	/**
+	 * czmc;李开霞,
+	 */
+	private String czmc;  
+	/**
+	 * rjczrq;null
+	 */
+	private String rjczrq; 
+	
 	public String getSjczfsmc() {
 		return sjczfsmc;
 	}
@@ -116,5 +143,17 @@ class GdxxData{
 	}
 	public void setRjczrq(String rjczrq) {
 		this.rjczrq = rjczrq;
+	}
+	public String getSjcze1() {
+		return sjcze1;
+	}
+	public void setSjcze1(String sjcze1) {
+		this.sjcze1 = sjcze1;
+	}
+	public String getRjcze1() {
+		return rjcze1;
+	}
+	public void setRjcze1(String rjcze1) {
+		this.rjcze1 = rjcze1;
 	}
 }

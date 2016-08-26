@@ -14,6 +14,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.version>0.0.1-SNAPSHOT</project.version>
+		<spider-version>0.0.2-SNAPSHOT</spider-version>
 	</properties>
 
 	<dependencyManagement>
@@ -71,12 +72,12 @@
 			<dependency>
 				<groupId>us.codecraft</groupId>
 				<artifactId>webmagic-core</artifactId>
-				<version>0.0.2-SNAPSHOT</version>
+				<version>${spider-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>us.codecraft</groupId>
 				<artifactId>webmagic-extension</artifactId>
-				<version>0.0.2-SNAPSHOT</version>
+				<version>${spider-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.heetian.dataPlatform</groupId>

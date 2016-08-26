@@ -25,9 +25,22 @@ public class JBBean {
 			return null;
 		JbData jbdata = data.get(0);
 		GsgsRegister jb = new GsgsRegister();
-		jb.setRgc(jbdata.getZch());
-		if(CheckUtils.checkCreditCode(jbdata.getZch()))
-			jb.setNsc(jbdata.getZch());//新增
+		String zch = jbdata.getZch();
+		String regnumber = zch;
+		String credit = zch;
+		if(zch.contains("/")){
+			String tmps[] = zch.split("/");
+			if(!tmps[0].contains("无"))
+				credit = tmps[0];
+			else{
+				credit = null;
+			}
+			if(!tmps[1].contains("无"))
+				regnumber = tmps[1];
+		}
+		jb.setRgc(regnumber);
+		if(CheckUtils.checkCreditCode(credit))
+			jb.setNsc(credit);//新增
 		if(jbdata.getQymc()==null||"".equals(jbdata.getQymc().trim())){
 			jb.setName(jbdata.getZhmc());//名称
 		}else{

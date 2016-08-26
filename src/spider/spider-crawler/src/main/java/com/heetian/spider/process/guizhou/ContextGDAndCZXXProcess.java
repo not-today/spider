@@ -4,6 +4,7 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 import com.google.gson.reflect.TypeToken;
+import com.heetian.spider.component.EnterUrls;
 import com.heetian.spider.component.TSTPageProcessor;
 import com.heetian.spider.process.abstractclass.GuiZhouProcessHandlePrepare;
 import com.heetian.spider.process.abstractclass.ProcessHandle;
@@ -17,7 +18,7 @@ public class ContextGDAndCZXXProcess extends GuiZhouProcessHandlePrepare {
 	public ContextGDAndCZXXProcess(){
 		this.isDownloadCodeProcess = false;
 		this.isStorageProcess = true;
-		setUniqueWebUri("/nzgs/search!searchTzr.shtml");
+		setUniqueWebUri(EnterUrls.GZGdxq);
 	}
 	@Override
 	protected void analyticalProcess(Page page, PageProcessor task) {

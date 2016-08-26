@@ -824,19 +824,11 @@
 		<property name="nextHandle" ref="guizhouContextJBXXProcess"></property>
 	</bean>
 	<bean id="guizhouContextJBXXProcess" class="com.heetian.spider.process.guizhou.ContexJBXXProcess">
-		<property name="uniqueWebUri" value="/search!searchData.shtml"></property>
-		<property name="nextHandle" ref="guizhouDetailURLProcess"></property>
-	</bean>
-	<bean id="guizhouDetailURLProcess" class="com.heetian.spider.process.guizhou.DetailURLProcess">
-		<property name="uniqueWebUri" value="/index.jsp"></property>
-		<property name="nextHandle" ref="guizhouDetailGDXXProcess"></property>
-	</bean>
-	<bean id="guizhouDetailGDXXProcess" class="com.heetian.spider.process.guizhou.DetailGDXXProcess">
-		<property name="uniqueWebUri" value="/nzgs/tzrxx.jsp"></property>
+		<property name="uniqueWebUri" value="/2016/nzgs/query!searchData.shtml"></property>
 		<property name="nextHandle" ref="guizhouContextGDAndCZXXProcess"></property>
 	</bean>
 	<bean id="guizhouContextGDAndCZXXProcess" class="com.heetian.spider.process.guizhou.ContextGDAndCZXXProcess">
-		<property name="uniqueWebUri" value="/nzgs/search!searchTzr.shtml"></property>
+		<property name="uniqueWebUri" value="/frame/query!searchTzr.shtml"></property>
 	</bean>
 <!-- 贵州 -->
 
@@ -1107,7 +1099,12 @@
 	<bean id="shanghaiHomeProcess" class="com.heetian.spider.process.shanghai.HomeProcess">
 		<property name="host" value="www.sgs.gov.cn"></property>
 		<property name="referer" value="http://gsxt.saic.gov.cn/"></property>
-		<property name="uniqueWebUri" value="https://www.sgs.gov.cn/notice/home"></property>
+		<property name="codeRecognized" value="com.heetian.spider.peking.strategy.ShangHai"></property>
+		<property name="uniqueWebUri" value="/notice/home"></property>
+		<property name="nextHandle" ref="shanghaiDownloadCodeProcess"></property>
+	</bean>
+	<bean id="shanghaiDownloadCodeProcess" class="com.heetian.spider.process.shanghai.DownloadCodeProcess">
+		<property name="uniqueWebUri" value="/notice/captcha"></property>
 		<property name="nextHandle" ref="shanghaiCompanyURLProcess"></property>
 	</bean>
 	<bean id="shanghaiCompanyURLProcess" class="com.heetian.spider.process.shanghai.CompanyURLProcess">

@@ -11,6 +11,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
 
+import com.heetian.spider.component.EnterUrls;
 import com.heetian.spider.component.TSTPageProcessor;
 import com.heetian.spider.process.abstractclass.ShangHaiProcessHandlePrepare;
 /**
@@ -22,7 +23,7 @@ public class CompanyURLProcess extends ShangHaiProcessHandlePrepare{
 	public CompanyURLProcess(){
 		this.isDownloadCodeProcess = false;
 		this.isStorageProcess = false;
-		setUniqueWebUri("/notice/search/ent_info_list");
+		setUniqueWebUri(EnterUrls.SHCom);
 		setProcessName(processName_list);
 	}
 	@Override

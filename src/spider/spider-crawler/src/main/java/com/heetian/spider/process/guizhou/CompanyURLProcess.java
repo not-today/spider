@@ -12,6 +12,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
 
 import com.google.gson.reflect.TypeToken;
+import com.heetian.spider.component.EnterUrls;
 import com.heetian.spider.component.TSTPageProcessor;
 import com.heetian.spider.peking.strategy.IsSucess;
 import com.heetian.spider.peking.strategy.RecognizedContext;
@@ -27,7 +28,7 @@ public class CompanyURLProcess extends GuiZhouProcessHandlePrepare{
 	public CompanyURLProcess(){
 		this.isDownloadCodeProcess = false;
 		this.isStorageProcess = false;
-		setUniqueWebUri(GZUrls.coms);
+		setUniqueWebUri(EnterUrls.GZComs);
 		setProcessName(processName_list);
 	}
 	@Override
@@ -57,15 +58,27 @@ public class CompanyURLProcess extends GuiZhouProcessHandlePrepare{
 		Iterator<DataBean> iter = beans.iterator();
 		while(iter.hasNext()){
 			DataBean bean = iter.next();
+			if(bean==null)
+				continue;
 			String regNumber = bean.getZch().trim();
+			if(regNumber==null)
+				continue;
+			String tmps[] = null;
+			if(regNumber.contains("/"))
+				tmps = regNumber.split("/");
+			if(!tmps[1].contains("无")){
+				regNumber = tmps[1];
+			}else{
+				regNumber = tmps[0];
+			}
+				
 			String entName = bean.getQymc().trim();
 			String nbxh = bean.getNbxh();//
 			if(!TSTUtils.checkIsExitForEnter(task, regNumber, entName)){
 				iter.remove();
 				continue;
 			}
-			for(int x=0;x<4;x++){
-				String url = builderURL(GZUrls.all,task.getSite());
+			for(int x=0;x<5;x++){
 				NameValuePair[] nvps = new NameValuePair[4];
 				nvps[0] = new BasicNameValuePair("nbxh", nbxh);
 				if(x==0){//基本
@@ -90,7 +103,7 @@ public class CompanyURLProcess extends GuiZhouProcessHandlePrepare{
 					nvps[3] = new BasicNameValuePair("type", "fz");
 				}
 				
-				Request request = builderRequest(url+"?"+urlTail()+"&"+Math.random(),Method.POST, regNumber,entName, nvps);
+				Request request = builderRequest(builderURL(EnterUrls.GZAll,task.getSite())+"?"+urlTail()+"&"+Math.random(),Method.POST, regNumber,entName, nvps);
 				page.addTargetRequest(request);
 			}
 		}
@@ -151,7 +164,6 @@ public class CompanyURLProcess extends GuiZhouProcessHandlePrepare{
 	    return "/"+path+"/index.jsp";
 	}
 	private void validateCodeFail(Page page, PageProcessor task,String[] resultsImage) {
-		String url = builderURL("/search!generateCode.shtml?validTag=searchImageCode&"+urlTail(),task.getSite());
-		page.addTargetRequest(builderRequest(url,Method.GET, null,null, null));
+		page.addTargetRequest(builderRequestGet(builderURL(EnterUrls.GZDwcode+"&"+urlTail(),task.getSite())));
 	}
 }

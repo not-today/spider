@@ -8,6 +8,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+import com.heetian.spider.component.EnterUrls;
 import com.heetian.spider.component.TSTPageProcessor;
 import com.heetian.spider.peking.strategy.RecognizedContext;
 import com.heetian.spider.process.abstractclass.GuiZhouProcessHandlePrepare;
@@ -21,7 +22,7 @@ public class DownloadCodeProcess extends GuiZhouProcessHandlePrepare implements 
 	public DownloadCodeProcess(){
 		this.isDownloadCodeProcess = true;
 		this.isStorageProcess = false;
-		setUniqueWebUri(GZUrls.dwcode);
+		setUniqueWebUri(EnterUrls.GZDwcode);
 	}
 	@Override
 	public void analyticalProcess(Page page,PageProcessor task) {
@@ -29,13 +30,13 @@ public class DownloadCodeProcess extends GuiZhouProcessHandlePrepare implements 
 		NameValuePair[] nvps = {
 				new BasicNameValuePair("validCode", results[0]),
 				new BasicNameValuePair("q", ((TSTPageProcessor)task).getSeedNm())};
-		Request request = builderRequestPost(builderURL(GZUrls.coms+"?"+urlTail(),task.getSite()), nvps);
+		Request request = builderRequestPost(builderURL(EnterUrls.GZComs+"?"+urlTail(),task.getSite()), nvps);
 		request.putExtra(RecognizedContext.saveName, results);
 		page.addTargetRequest(request);
 		return;
 	}
 	@Override
 	public Request reloadCode(Request request,Site site) {
-		return builderRequestGet(builderURL(GZUrls.dwcode+"&"+urlTail(),site));
+		return builderRequestGet(builderURL(EnterUrls.GZDwcode+"&"+urlTail(),site));
 	}
 }

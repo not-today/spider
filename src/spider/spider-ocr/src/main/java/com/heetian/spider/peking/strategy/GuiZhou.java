@@ -67,7 +67,7 @@ public class GuiZhou extends AbstractRecognized{
 		}
 		if(!arrOver)
 			throw new ImageConverte("识别出错,不完整:"+Arrays.toString(arr));
-		return ResultProcess.newInstance(ValidateType.noCount, arr);
+		return ResultProcess.newInstance(ValidateType.count, arr);
 	}
 	/**
 	 * 清除背景颜色、切出左侧30像素、上面10像素、右侧30像素空白

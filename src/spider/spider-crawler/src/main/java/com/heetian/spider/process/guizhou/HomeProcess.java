@@ -3,6 +3,7 @@ package com.heetian.spider.process.guizhou;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+import com.heetian.spider.component.EnterUrls;
 import com.heetian.spider.process.abstractclass.GuiZhouProcessHandlePrepare;
 public class HomeProcess extends GuiZhouProcessHandlePrepare{
 	public HomeProcess(){
@@ -13,6 +14,6 @@ public class HomeProcess extends GuiZhouProcessHandlePrepare{
 	}
 	@Override
 	protected void analyticalProcess(Page page, PageProcessor task) {
-		page.addTargetRequest(builderRequestGet(builderURL(GZUrls.dwcode+"&"+urlTail(),task.getSite())));
+		page.addTargetRequest(builderRequestGet(builderURL(EnterUrls.GZDwcode+"&"+urlTail(),task.getSite())));
 	}
 }
