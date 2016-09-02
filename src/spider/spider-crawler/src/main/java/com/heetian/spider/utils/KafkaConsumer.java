@@ -48,9 +48,9 @@ public class KafkaConsumer {
 		String groupID = "heetian"; //消费端 标识-test消费端
 		try {
 			groupID = InetAddress.getLocalHost().getHostAddress();
-			logger.info("kafkagroupID:"+groupID+"............................");
+			logger.debug("kafka的groupID是"+groupID+"............................");
 		} catch (UnknownHostException e) {
-			logger.warn("获取本地ip失败，设置kafka的groupip失败",e);
+			logger.warn("获取本地ip失败，设置kafka的groupID失败,将其设置为默认groupID["+groupID+"]",e);
 		}
 		Properties properties = new Properties();
 		properties.put("zookeeper.connect", KafkaCfg.ZK_CONNECT);

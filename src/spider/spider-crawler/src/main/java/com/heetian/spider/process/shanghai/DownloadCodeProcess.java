@@ -1,9 +1,7 @@
 package com.heetian.spider.process.shanghai;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
-import com.heetian.spider.component.EnterUrls;
 import com.heetian.spider.process.abstractclass.ShangHaiProcessHandlePrepare;
 
 import us.codecraft.webmagic.Page;
@@ -24,13 +22,15 @@ public class DownloadCodeProcess extends ShangHaiProcessHandlePrepare{
 	}
 	@Override
 	public void analyticalProcess(Page page,PageProcessor task) {
+		String url = "https://www.sgs.gov.cn/notice/security/verify_captcha?"+urlTail();
 		NameValuePair[] nvps = (NameValuePair[]) page.getRequest().getExtra(NAMEVALUEPAIR);
-		nvps[1] = new BasicNameValuePair("captcha", "3");
-		Request req= builderRequestPost(builderURL(EnterUrls.SHCom+"?"+urlTail(),task.getSite()), nvps);
-		page.addTargetRequest(req);
+		Request request = builderRequestPost(url, nvps);
+		page.addTargetRequest(request);
 	}
 	@Override
 	public Request reloadCode(Request request,Site site) {
-		return builderRequestGet(builderURL("/notice/captcha?preset=&ra=?"+Math.random(),site));
+		Request tmp = builderRequestGet(builderURLHttps("/notice/captcha?preset=&ra=?"+Math.random(),site));
+		tmp.putExtra(NAMEVALUEPAIR, request.getExtra(NAMEVALUEPAIR));
+		return tmp;
 	}
 }

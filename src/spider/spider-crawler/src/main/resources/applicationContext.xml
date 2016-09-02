@@ -1105,6 +1105,10 @@
 	</bean>
 	<bean id="shanghaiDownloadCodeProcess" class="com.heetian.spider.process.shanghai.DownloadCodeProcess">
 		<property name="uniqueWebUri" value="/notice/captcha"></property>
+		<property name="nextHandle" ref="shanghaiValidateCodeProcess"></property>
+	</bean>
+	<bean id="shanghaiValidateCodeProcess" class="com.heetian.spider.process.shanghai.ValidateCodeProcess">
+		<property name="uniqueWebUri" value="/notice/security/verify_captcha"></property>
 		<property name="nextHandle" ref="shanghaiCompanyURLProcess"></property>
 	</bean>
 	<bean id="shanghaiCompanyURLProcess" class="com.heetian.spider.process.shanghai.CompanyURLProcess">

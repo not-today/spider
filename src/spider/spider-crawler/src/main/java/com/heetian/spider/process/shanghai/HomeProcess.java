@@ -19,17 +19,16 @@ public class HomeProcess extends ShangHaiProcessHandlePrepare{
 	public HomeProcess(){
 		this.isDownloadCodeProcess = false;
 		this.isStorageProcess = false;
-		setUniqueWebUri("https://www.sgs.gov.cn/notice/home");
+		setUniqueWebUri("https://www.sgs.gov.cn/notice?xx=xx");
 		setProcessName(processName_home);
 	}
 	@Override
 	protected void analyticalProcess(Page page, PageProcessor task) {
-		Request request = builderRequestGet(builderURL("/notice/captcha?preset=&ra=?"+Math.random(),task.getSite()));
+		Request request = builderRequestGet(builderURLHttps("/notice/captcha?preset=&ra=?"+Math.random(),task.getSite()));
 		String sessionID = page.getHtml().xpath("//form//input[@name='session.token']/@value").get();
 		NameValuePair[] nvps = {
-				new BasicNameValuePair("condition.pageNo", "1"),
-				new BasicNameValuePair("captcha","32"),	
-				new BasicNameValuePair("condition.insType", ""),
+				new BasicNameValuePair("searchType", "1"),
+				new BasicNameValuePair("captcha","0"),	
 				new BasicNameValuePair("session.token", sessionID),
 				new BasicNameValuePair("condition.keyword", ((TSTPageProcessor)task).getSeedNm())
 		};

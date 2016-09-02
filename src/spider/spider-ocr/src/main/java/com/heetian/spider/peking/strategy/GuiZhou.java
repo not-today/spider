@@ -13,8 +13,6 @@ import java.util.Map.Entry;
 
 import com.heetian.spider.ocr.exception.ImageConverte;
 import com.heetian.spider.ocr.util.ImageUtils;
-import com.heetian.spider.ocr.util.Kmeans;
-import com.heetian.spider.ocr.util.Pixel;
 import com.heetian.spider.ocr.util.ResultProcess;
 import com.heetian.spider.ocr.util.ValidateType;
 /**
@@ -29,8 +27,8 @@ public class GuiZhou extends AbstractRecognized{
 	@Override
 	protected BufferedImage pretreatment(BufferedImage img,Map<String, String> recogScop) throws ImageConverte {
 		img = clearBG(img);// 清除背景颜色
-		img = kmeansFilter(img);
-		img = smoothFilter(img);
+		img = ImageUtils.kmeansFilter(img);
+		img = ImageUtils.smoothFilter(img);
 		//img = binaryzation(img);
 		return img;
 	}
@@ -89,106 +87,6 @@ public class GuiZhou extends AbstractRecognized{
 		return image;
 	}
 	/**
-	 * Kmeans 聚类分析
-	 * 
-	 * @param bufferedImage
-	 * @param dir
-	 * @param fileName
-	 * @return
-	 * @throws IOException
-	 */
-	public BufferedImage kmeansFilter(BufferedImage bufferedImage) {
-		int width = bufferedImage.getWidth();
-		int height = bufferedImage.getHeight();
-		List<Pixel> pixels = new ArrayList<Pixel>();
-		for (int w = 0; w < width; w++) {
-			for (int h = 0; h < height; h++) {
-				int rgb0 = bufferedImage.getRGB(w, h);
-				if (rgb0 == -1)
-					continue;// 白色背景
-				// 计算像素点周围平均颜色
-				List<Integer> list = new ArrayList<Integer>();
-				list.add(rgb0);
-				for (int x = w - 3; x <= w + 3; x++) {
-					for (int y = h - 3; y <= h + 3; y++) {
-						if (x < 0 || y < 0 || x > width - 1 || y > height - 1) {
-							continue;
-						}
-						int rgb1 = bufferedImage.getRGB(x, y);
-						if (rgb1 != -1 && isSimilarColor(rgb0, rgb1))
-							list.add(rgb1);
-					}
-				}
-				pixels.add(new Pixel(w, h, calAvgColor(list)));
-			}
-		}
-		//Date start = new Date();
-		// Kmeans聚类分析
-		Kmeans kmeans = new Kmeans(pixels, 4);
-		List<Pixel>[] results = kmeans.execute();
-		//Date end = new Date();
-		//System.out.println(end.getTime() - start.getTime());
-		// 求取分组前几种颜色平均值
-		int[] rgbs = new int[results.length];
-		for (int i = 0; i < results.length; i++) {
-			if (results[i].size() < 50) {
-				rgbs[i] = -1;
-				continue;
-			}
-			List<Integer> list = new ArrayList<Integer>();
-			for (Pixel p : results[i]) {
-				list.add(p.getRGB());
-			}
-			rgbs[i] = calAvgColor(list); // 求平均值
-		}
-		// 修正颜色
-		for (int i = 0; i < results.length; i++) {
-			for (Pixel p : results[i]) {
-				bufferedImage.setRGB(p.getX(), p.getY(), rgbs[i]);
-			}
-		}
-		return bufferedImage;
-	}
-	/**
-	 * 去除单独噪点
-	 * 
-	 * @param bufferedImage
-	 * @param dir
-	 * @param fileName
-	 */
-	public BufferedImage smoothFilter(BufferedImage bufferedImage){
-		int width = bufferedImage.getWidth();
-		int height = bufferedImage.getHeight();
-		for (int w = 0; w < width; w++) {
-			for (int h = 0; h < height; h++) {
-				int rgb = bufferedImage.getRGB(w, h);
-				if (rgb == -1)
-					continue;
-				boolean bool = true;
-				int i = 0;
-				while (true) {
-					int x = w + i;
-					if (x > width - 1 || bufferedImage.getRGB(x, h) != rgb) {
-						break;
-					}
-					if (h - 1 >= 0 && bufferedImage.getRGB(x, h - 1) == rgb) {
-						bool = false;
-						break;
-					}
-					if (h + 1 < height && bufferedImage.getRGB(x, h + 1) == rgb) {
-						bool = false;
-						break;
-					}
-					i++;
-				}
-				if (bool)
-					bufferedImage.setRGB(w, h, 0xFFFFFF);
-			}
-		}
-		return bufferedImage;
-	}
-
-	/**
 	 * 
 	 * @param bufferedImage
 	 * @param dir
@@ -208,38 +106,6 @@ public class GuiZhou extends AbstractRecognized{
 		return binaryBufferedImage;
 	}
 
-	private static boolean isSimilarColor(int rgb1, int rgb2) {
-
-		Color c1 = new Color(rgb1);
-		float[] hsb1 = Color.RGBtoHSB(c1.getRed(), c1.getGreen(), c1.getBlue(), null);
-		int h1 = Math.round(hsb1[0] * 100);
-		Color c2 = new Color(rgb2);
-		float[] hsb2 = Color.RGBtoHSB(c2.getRed(), c2.getGreen(), c2.getBlue(), null);
-		int h2 = Math.round(hsb2[0] * 100);
-		if (Math.abs(h1 - h2) <= 10) {
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * 计算平均颜色
-	 * 
-	 * @param list
-	 * @return
-	 */
-	private static int calAvgColor(List<Integer> list) {
-		if (list == null || list.size() == 0) {
-			return 0;
-		}
-		int sumR = 0, sumG = 0, sumB = 0;
-		for (int rgb : list) {
-			Color c = new Color(rgb);
-			sumR += c.getRed();
-			sumG += c.getGreen();
-			sumB += c.getBlue();
-		}
-		return new Color(sumR / list.size(), sumG / list.size(), sumB / list.size()).getRGB();
-	}
 	/**
 	 * 获取灰度值ֵ
 	 * 

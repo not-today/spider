@@ -3,17 +3,13 @@ package com.heetian.spider.process.shanghai;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+import com.heetian.spider.component.EnterUrls;
+import com.heetian.spider.component.TSTPageProcessor;
+import com.heetian.spider.process.abstractclass.ShangHaiProcessHandlePrepare;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.EnterUrls;
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.process.abstractclass.ShangHaiProcessHandlePrepare;
 /**
  * 
  * @author tst
@@ -28,7 +24,7 @@ public class CompanyURLProcess extends ShangHaiProcessHandlePrepare{
 	}
 	@Override
 	public void analyticalProcess(Page page,PageProcessor task) {
-		String nextPage_hebei = (String) page.getRequest().getExtra("nextPage_hebei");
+		/*String nextPage_hebei = (String) page.getRequest().getExtra("nextPage_hebei");
 		if(!"nextPage_hebei".equals(nextPage_hebei)){
 			String maxNumber = page.getHtml().regex("(\\s*page\\s*:\\s*\")(\\d+)(\"\\s*,\\s*)",2).replace("\\s", "").get();
 			if(maxNumber!=null&&maxNumber.matches("\\d*")){
@@ -51,14 +47,15 @@ public class CompanyURLProcess extends ShangHaiProcessHandlePrepare{
 					}
 				}
 			}
-		}
+		}*/
 		List<String> hrefs = page.getHtml().xpath("//div[@class='list-info']/div[@class='list-item']/div[@class='link']/a/@href").all();
 		if(hrefs==null||hrefs.size()<=0){
 			return;
 		}
 		Iterator<String> iter = hrefs.iterator();
 		while(iter.hasNext()){
-			Request request = builderRequest(iter.next(),Method.GET, null,null, (NameValuePair[])page.getRequest().getExtra(NAMEVALUEPAIR));
+			Request request = builderRequestGet(iter.next());
+			//request.putExtra(NAMEVALUEPAIR, page.getRequest().getExtra(NAMEVALUEPAIR));
 			page.addTargetRequest(request);
 		}
 		((TSTPageProcessor)task).setSeedSdP(((TSTPageProcessor)task).getSeedSdP()+hrefs.size());

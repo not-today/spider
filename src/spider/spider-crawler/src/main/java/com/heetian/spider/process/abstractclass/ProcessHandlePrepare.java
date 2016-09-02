@@ -24,6 +24,7 @@ public abstract class ProcessHandlePrepare implements ProcessHandle,ThemeInterfa
 	private ErrorStatus errorStatusListen = new DefaultErrorStatusListen();
 	protected static Logger logger = LoggerFactory.getLogger(ProcessHandlePrepare.class);
 	protected static final String PROTECTOL = "http://";
+	protected static final String PROTECTOLHTTPS = "https://";
 	protected static final String HEADS = "allHead";
 	private String processName;
 	public String getProcessName() {
@@ -203,6 +204,13 @@ public abstract class ProcessHandlePrepare implements ProcessHandle,ThemeInterfa
 			throw new RuntimeException("构建url失败，对处理uri时，原因是uri为null");
 		if(!subURL.contains(PROTECTOL))
 			subURL = PROTECTOL+site.getDomain()+subURL;
+		return subURL;
+	}
+	protected String builderURLHttps(String subURL,Site site){
+		if(subURL==null)
+			throw new RuntimeException("构建url失败，对处理uri时，原因是uri为null");
+		if(!subURL.contains(PROTECTOLHTTPS))
+			subURL = PROTECTOLHTTPS+site.getDomain()+subURL;
 		return subURL;
 	}
 	/**

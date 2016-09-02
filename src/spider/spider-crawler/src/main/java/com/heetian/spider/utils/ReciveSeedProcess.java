@@ -29,7 +29,7 @@ public class ReciveSeedProcess extends TopicProcessConsumerAbs {
 				String tmp = seedComp[0]+"$"+codes[0]+"$"+codes[1];
 				tmps.add(tmp);
 			}
-			logger.info("从该条["+msg.replace("\r\n", "@").replace("\n", "$")+"]种子中共解析到种子:"+tmps);
+			logger.debug("从该条["+msg.replace("\r\n", "@").replace("\n", "$")+"]种子中共解析到种子:"+tmps);
 		}
 	}
 }

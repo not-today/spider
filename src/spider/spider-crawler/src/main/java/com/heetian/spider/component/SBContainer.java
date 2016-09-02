@@ -17,7 +17,7 @@ public class SBContainer {
 	public static BufferedSeed remove(){
 		if(seeds.size()>0){
 			BufferedSeed seed = seeds.remove(0);
-			logger.info("移除一个种子还剩余："+seeds.size());
+			logger.debug("移除一个种子还剩余："+seeds.size());
 			return seed;
 		}
 		throw new NullPointerException("容器中没有种子");
