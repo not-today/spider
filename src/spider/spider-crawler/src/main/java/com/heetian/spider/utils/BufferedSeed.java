@@ -31,7 +31,16 @@ public class BufferedSeed {
 	private SeedStatusEnum status = SeedStatusEnum.update;
 	private Proxy proxy;
 	private Seed seed;
+	private SeedJsonBean origin;
 	
+	public SeedJsonBean getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(SeedJsonBean origin) {
+		this.origin = origin;
+	}
+
 	public BufferedSeed(Seed seed) {
 		this.seed = seed;
 		this.seed.setSm(new SeedMapping());
