@@ -22,7 +22,7 @@ public class ContexDJ2Process extends GuangDongProcessHandlePrepare {
 	public ContexDJ2Process(){
 		this.isDownloadCodeProcess = false;
 		this.isStorageProcess = true;
-		setUniqueWebUri("/web/GSZJGSPT/QyxyDetail.aspx");
+		setUniqueWebUri("/search/search!entityShow");
 		setProcessName(processName_containJbxx);
 	}
 	@Override

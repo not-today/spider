@@ -22,7 +22,7 @@ import com.heetian.spider.ocr.util.ValidateType;
  */
 public class ShangHai extends AbstractRecognized{
 	public ShangHai(){
-		//init("stencil"+File.separator+"jiangxi",Color.BLACK,distiguingsh_many);
+		init("stencil"+File.separator+"jiangxi",Color.BLACK,distiguingsh_many);
 	}
 	public static void main(String[] args) {
 		ShangHai sh = new ShangHai();
@@ -58,7 +58,7 @@ public class ShangHai extends AbstractRecognized{
 			}
 		}
 		
-		ImageUtils.smoothFilter(img,Color.WHITE,7);
+		/*ImageUtils.smoothFilter(img,Color.WHITE,7);
 		try {
 			img = recgLine(img);
 		} catch (IOException e1) {
@@ -71,7 +71,7 @@ public class ShangHai extends AbstractRecognized{
 			ImageUtils.copyFileImg(img, new File("C:\\Users\\tst\\Desktop\\pic\\sub1\\"+(x++)+".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		return img;
 	}
 	/**

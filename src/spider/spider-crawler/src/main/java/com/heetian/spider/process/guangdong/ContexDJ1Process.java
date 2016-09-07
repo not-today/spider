@@ -5,18 +5,17 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.heetian.spider.component.TSTPageProcessor;
+import com.heetian.spider.dbcp.bean.GsgsRegister;
+import com.heetian.spider.process.abstractclass.GuangDongProcessHandlePrepare;
+import com.heetian.spider.utils.AnalysisForTable;
+import com.heetian.spider.utils.TSTUtils;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.dbcp.bean.GsgsRegister;
-import com.heetian.spider.process.abstractclass.GuangDongProcessHandlePrepare;
-import com.heetian.spider.utils.AnalysisForTable;
-import com.heetian.spider.utils.PvnCode;
-import com.heetian.spider.utils.TSTUtils;
 /**
  * 
  * @author tst
@@ -41,7 +40,6 @@ public class ContexDJ1Process extends GuangDongProcessHandlePrepare {
 			GsgsRegister jbxxBean = AnalysisForTable.jbxxHTMLProcessToJAVAObject(regNumber, entName, jbTrs,tst);
 			if(jbxxBean==null)
 				return ;
-			jbxxBean.setPvn(PvnCode.code_guangdong);
 			String jyfw = page.getHtml().xpath("//span[@id='RegInfo_SSDJCBuItem_labCBuItem']/allText()").get();
 			jbxxBean.setRgs(jyfw);
 			jbxxBean.setUrl(TSTUtils.bufferedURL(page.getRequest().getUrl(), httpMethodParam_get, null));
@@ -65,17 +63,22 @@ public class ContexDJ1Process extends GuangDongProcessHandlePrepare {
 				NameValuePair[] nvps = new BasicNameValuePair[inputs.size()+2];
 				for(int x=0;x<inputs.size();x++){
 					String input = inputs.get(x);
-					String name = new Html(input).xpath("//input/@name").get();
-					String value = new Html(input).xpath("//input/@value").get();
+					String name = new Html(input).xpath("//input/@name").get().trim();
+					String value = new Html(input).xpath("//input/@value").get().trim();
 					if(name.equals("__EVENTTARGET")){
 						nvps[x] = new BasicNameValuePair(name, "Timer2");
 					}else{
 						nvps[x] = new BasicNameValuePair(name, value);
 					}
 				}
+				//http://www.szcredit.com.cn/web/GSZJGSPT/QyxyDetail.aspx?rid=9ee9505ab9eb4f2cbdbe2fc7698d48a5
+				//这种变更url会出错。未解决
 				nvps[inputs.size()] = new BasicNameValuePair("ScriptManager1", "biangengxinxi|Timer2");
 				nvps[inputs.size()+1] = new BasicNameValuePair("__ASYNCPOST", "true");
-				Request request = builderRequest(page.getRequest().getUrl().split("\\&")[0]+"&"+urlTail(), Method.POST, regNumber, entName, nvps);
+				Request request = builderRequest(page.getRequest().getUrl(), Method.POST, regNumber, entName, nvps);
+				task.getSite().addHeader("Referer", page.getRequest().getUrl());
+				task.getSite().addHeader("X-Requested-With", "XMLHttpRequest");
+				task.getSite().addHeader("X-MicrosoftAjax", "Delta=true");
 				request.putExtra(Request.private_charset, "gb2312");
 				page.addTargetRequest(request);
 			}

@@ -1,10 +1,9 @@
 package com.heetian.spider.process.guangdong;
 
+import com.heetian.spider.process.abstractclass.GuangDongProcessHandlePrepare;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.process.abstractclass.GuangDongProcessHandlePrepare;
 /**
  * 珠海格力电器股份有限公司,美的集团有限公司,华为技术有限公司,深圳市中兴通讯资产管理有限公司
  * 中国南方电网有限责任公司
@@ -30,6 +29,6 @@ public class HomeProcess extends GuangDongProcessHandlePrepare{
 	@Override
 	protected void analyticalProcess(Page page, PageProcessor task) {
 		String url = "http://gsxt.gdgs.gov.cn/aiccips/verify.html?random="+Math.random();
-		page.addTargetRequest(builderRequest(url,Method.GET, null,null, null));
+		page.addTargetRequest(builderRequestGet(url));
 	}
 }

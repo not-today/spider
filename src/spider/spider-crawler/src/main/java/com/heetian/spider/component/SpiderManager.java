@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.Spider.Status;
+import us.codecraft.webmagic.scheduler.QueueScheduler;
 
 import com.heetian.spider.utils.PvnCode;
 
@@ -27,6 +28,7 @@ public class SpiderManager implements SpiderManagerInter{
 					.addUrl(homeURL)
 					.setDownloader(new TSTDownload())
 					.addPipeline(new TSTPipeline())
+					.setScheduler(new QueueScheduler().setDuplicateRemover(new TstDuplicateRemover()))
 					.thread(1);
 			logger.info("创建一个spider："+page.getSeedNm()+":"+page.getProvince());
 			spiders.add(spider);

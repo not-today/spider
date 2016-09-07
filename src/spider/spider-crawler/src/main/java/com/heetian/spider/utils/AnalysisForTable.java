@@ -679,8 +679,8 @@ public class AnalysisForTable {
 			return;
 		if (key.contains("注册号")||key.contains("统一社会信用代码")){
 			gsgsRegister.setRgc(value);
-			if(CheckUtils.checkCreditCode(value))
-				gsgsRegister.setNsc(value);
+		if(CheckUtils.checkCreditCode(value))
+			gsgsRegister.setNsc(value);
 		}else if (key.contains("名称")||key.contains("事务所名称"))
 			gsgsRegister.setName(value);
 		else if (key.contains("类型"))

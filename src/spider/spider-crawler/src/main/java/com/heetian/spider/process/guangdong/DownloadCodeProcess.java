@@ -28,7 +28,7 @@ public class DownloadCodeProcess extends GuangDongProcessHandlePrepare implement
 	@Override
 	public void analyticalProcess(Page page,PageProcessor task) {
 		String results[] = (String[]) page.getRequest().getExtra(pictureContent);
-		String url = builderURL("http://gsxt.gdgs.gov.cn/aiccips/CheckEntContext/checkCode.html?"+urlTail(),task.getSite());
+		String url = builderURL("http://gsxt.gdgs.gov.cn/aiccips/CheckEntContext/checkCode.html",task.getSite());
 		NameValuePair[] nvps = {
 				new BasicNameValuePair("code", results[0]),
 				new BasicNameValuePair("textfield", ((TSTPageProcessor)task).getSeedNm())
@@ -40,7 +40,7 @@ public class DownloadCodeProcess extends GuangDongProcessHandlePrepare implement
 	}
 	@Override
 	public Request reloadCode(Request request,Site site) {
-		String url = builderURL("http://gsxt.gdgs.gov.cn/aiccips/verify.html?random="+Math.random()+"&"+urlTail(),site);
-		return builderRequest(url,Method.GET, null,null, null);
+		String url = builderURL("http://gsxt.gdgs.gov.cn/aiccips/verify.html?random="+Math.random(),site);
+		return builderRequestGet(url);
 	}
 }

@@ -41,7 +41,7 @@ public class CompanyURLProcess extends GuangDongProcessHandlePrepare{
 				iter.remove();
 				continue;
 			}
-			url = builderURL(url+"&"+urlTail(),task.getSite());
+			url = builderURL(url,task.getSite());
 			if(url.contains("/search/search!entityShow?entityVo.pripid")){
 				logger.warn("此类型种子，暂时未抓取:"+entName);
 				iter.remove();
