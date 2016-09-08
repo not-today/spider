@@ -31,5 +31,6 @@ public class ReciveSeedProcess extends TopicProcessConsumerAbs {
 			}
 			logger.debug("从该条["+msg.replace("\r\n", "@").replace("\n", "$")+"]种子中共解析到种子:"+tmps);
 		}
+		
 	}
 }
