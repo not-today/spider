@@ -5,17 +5,16 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 
+import com.heetian.spider.peking.strategy.IsSucess;
+import com.heetian.spider.peking.strategy.RecognizedContext;
+import com.heetian.spider.process.abstractclass.JiLinProcessHandlePrepare;
+import com.heetian.spider.utils.TSTUtils;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.peking.strategy.IsSucess;
-import com.heetian.spider.peking.strategy.RecognizedContext;
-import com.heetian.spider.process.abstractclass.JiLinProcessHandlePrepare;
-import com.heetian.spider.utils.TSTUtils;
 /**
  * 
  * @author tst
@@ -52,7 +51,6 @@ public class CompanyURLProcess extends JiLinProcessHandlePrepare{
 				request.putExtra("encrpripid", encrpripid);
 				page.addTargetRequest(request);
 			}
-			((TSTPageProcessor)task).setSeedSdP(uls.size());
 			return;
 		}
 		if(page.getHtml().xpath("//div/div[@class='list-a']/text()").get()!=null){

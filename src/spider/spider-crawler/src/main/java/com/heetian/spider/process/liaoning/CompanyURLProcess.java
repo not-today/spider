@@ -7,18 +7,17 @@ import java.util.Map;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.utils.HttpConstant.Method;
-
 import com.google.gson.reflect.TypeToken;
-import com.heetian.spider.component.TSTPageProcessor;
 import com.heetian.spider.peking.strategy.IsSucess;
 import com.heetian.spider.peking.strategy.RecognizedContext;
 import com.heetian.spider.process.abstractclass.LiaoNingProcessHandlePrepare;
 import com.heetian.spider.utils.AnalysisForJson;
 import com.heetian.spider.utils.TSTUtils;
+
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.utils.HttpConstant.Method;
 /**
  * 
  * @author tst
@@ -76,7 +75,6 @@ public class CompanyURLProcess extends LiaoNingProcessHandlePrepare{
 					page.addTargetRequest(request);
 				}
 			}
-			((TSTPageProcessor)task).setSeedSdP(results.size());
 		}else{//验证码输入错误后的处理
 			RecognizedContext.newInstance().updateCurrentError(IsSucess.FAIL, Integer.parseInt(resultsImage[1]), Long.parseLong(resultsImage[2]));
 			String url = builderURL("/saicpub/commonsSC/loginDC/securityCode.action?tdate="+TSTUtils.randomNum() +"&"+urlTail(),task.getSite());

@@ -1,11 +1,10 @@
 package com.heetian.spider.process.chongqing;
 
+import com.heetian.spider.process.abstractclass.ChongQingProcessHandlePrepare;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.process.abstractclass.ChongQingProcessHandlePrepare;
 
 /**
  * 
@@ -23,7 +22,6 @@ public class CompanyDetailProcess extends ChongQingProcessHandlePrepare {
 	public void analyticalProcess(Page page, PageProcessor task) {
 		String tail = page.getHtml().xpath("//html[@id='ng-app']/@ng-init").replace("['\\s]", "").replace(";", "&").get();
 		if(tail==null){
-			((TSTPageProcessor) task).setSeedSdP(((TSTPageProcessor) task).getSeedSdP()-1);
 			return;
 		}
 		String url = builderURL("/search_getEnt.action?"+tail+ urlTail(), task.getSite());

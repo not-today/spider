@@ -6,16 +6,16 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.heetian.spider.component.TSTPageProcessor;
+import com.heetian.spider.process.abstractclass.GanSuProcessHandlePrepare;
+import com.heetian.spider.utils.TSTUtils;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.process.abstractclass.GanSuProcessHandlePrepare;
-import com.heetian.spider.utils.TSTUtils;
 /**
  * 
  * @author tst
@@ -65,7 +65,5 @@ public class CompanyURLProcess extends GanSuProcessHandlePrepare{
 			Request request = builderRequest(builderURL(url+"?"+urlTail()+"&a="+Math.random(),task.getSite()),Method.POST, regNumber,entName, nvps);
 			page.addTargetRequest(request);
 		}
-		((TSTPageProcessor)task).setSeedSdP(uls.size());
-		return;
 	}
 }

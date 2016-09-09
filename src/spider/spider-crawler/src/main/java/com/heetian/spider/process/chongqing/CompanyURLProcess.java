@@ -6,14 +6,13 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.heetian.spider.process.abstractclass.ChongQingProcessHandlePrepare;
+import com.heetian.spider.utils.TSTUtils;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.process.abstractclass.ChongQingProcessHandlePrepare;
-import com.heetian.spider.utils.TSTUtils;
 /**
  * 
  * @author tst
@@ -54,6 +53,5 @@ public class CompanyURLProcess extends ChongQingProcessHandlePrepare{
 			String url = builderURL("/search_ent?"+urlTail(),task.getSite());
 			page.addTargetRequest(builderRequest(url,Method.POST, null,null, nvps));
 		}
-		((TSTPageProcessor)task).setSeedSdP(divs.size());
 	}
 }

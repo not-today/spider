@@ -5,16 +5,16 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.utils.HttpConstant.Method;
-
 import com.heetian.spider.component.SeedStatusEnum;
 import com.heetian.spider.component.TSTPageProcessor;
 import com.heetian.spider.dbcp.bean.ProxyStatus;
 import com.heetian.spider.process.abstractclass.PekingProcessHandlePrepare;
 import com.heetian.spider.utils.TSTUtils;
+
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.utils.HttpConstant.Method;
 /**
  * 
  * @author tst
@@ -64,6 +64,5 @@ public class CompanyURLProcess extends PekingProcessHandlePrepare{
 			request.putExtra("entId", regId);
 			page.addTargetRequest(request);
 		}
-		tst.setSeedSdP(params.size());
 	}
 }

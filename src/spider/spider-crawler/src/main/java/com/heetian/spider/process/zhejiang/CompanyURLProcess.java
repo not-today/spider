@@ -2,15 +2,14 @@ package com.heetian.spider.process.zhejiang;
 
 import java.util.List;
 
+import com.heetian.spider.process.abstractclass.ZheJiangProcessHandlePrepare;
+import com.heetian.spider.utils.TSTUtils;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.process.abstractclass.ZheJiangProcessHandlePrepare;
-import com.heetian.spider.utils.TSTUtils;
 /**
  * 
  * @author tst
@@ -49,6 +48,5 @@ public class CompanyURLProcess extends ZheJiangProcessHandlePrepare{
 			request_ba.putExtra(keyData, "all");
 			page.addTargetRequest(request_ba);
 		}
-		((TSTPageProcessor)task).setSeedSdP(urls.size());
 	}
 }

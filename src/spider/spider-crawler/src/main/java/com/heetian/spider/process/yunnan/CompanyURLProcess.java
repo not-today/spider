@@ -6,13 +6,12 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.heetian.spider.process.abstractclass.YunNanProcessHandlePrepare;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.process.abstractclass.YunNanProcessHandlePrepare;
 /**
  * 
  * @author tst
@@ -61,6 +60,5 @@ public class CompanyURLProcess extends YunNanProcessHandlePrepare{
 			Request request = builderRequest(iter.next(),Method.GET, null,null, (NameValuePair[])page.getRequest().getExtra(NAMEVALUEPAIR));
 			page.addTargetRequest(request);
 		}
-		((TSTPageProcessor)task).setSeedSdP(((TSTPageProcessor)task).getSeedSdP()+hrefs.size());
 	}
 }

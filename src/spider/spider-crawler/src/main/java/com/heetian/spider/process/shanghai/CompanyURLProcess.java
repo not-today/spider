@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.heetian.spider.component.EnterUrls;
-import com.heetian.spider.component.TSTPageProcessor;
 import com.heetian.spider.process.abstractclass.ShangHaiProcessHandlePrepare;
 
 import us.codecraft.webmagic.Page;
@@ -58,6 +57,5 @@ public class CompanyURLProcess extends ShangHaiProcessHandlePrepare{
 			//request.putExtra(NAMEVALUEPAIR, page.getRequest().getExtra(NAMEVALUEPAIR));
 			page.addTargetRequest(request);
 		}
-		((TSTPageProcessor)task).setSeedSdP(((TSTPageProcessor)task).getSeedSdP()+hrefs.size());
 	}
 }

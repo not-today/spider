@@ -7,12 +7,6 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.selector.Html;
-import us.codecraft.webmagic.selector.Selectable;
-import us.codecraft.webmagic.utils.HttpConstant.Method;
-
 import com.google.gson.reflect.TypeToken;
 import com.heetian.spider.component.SeedStatusEnum;
 import com.heetian.spider.component.TSTPageProcessor;
@@ -20,6 +14,12 @@ import com.heetian.spider.dbcp.bean.ProxyStatus;
 import com.heetian.spider.process.abstractclass.JiangSuProcessHandlePrepare;
 import com.heetian.spider.utils.AnalysisForJson;
 import com.heetian.spider.utils.TSTUtils;
+
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.selector.Html;
+import us.codecraft.webmagic.selector.Selectable;
+import us.codecraft.webmagic.utils.HttpConstant.Method;
 /**
  * 
  * @author tst
@@ -96,7 +96,6 @@ public class CompanyURLProcess extends JiangSuProcessHandlePrepare{
 				zyryxx(page, task, org, id, seq_id, regNumber, entName);
 				fzjgxx(page, task, org, id, seq_id, regNumber, entName);
 			}
-			tst.setSeedSdP(as.size());
 		}
 	}
 	private void fzjgxx(Page page, PageProcessor task, String org, String id, String seq_id, String regNumber, String entName) {

@@ -3,14 +3,13 @@ package com.heetian.spider.process.guangxi;
 import java.util.Iterator;
 import java.util.List;
 
+import com.heetian.spider.process.abstractclass.GuangXiProcessHandlePrepare;
+import com.heetian.spider.utils.TSTUtils;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.process.abstractclass.GuangXiProcessHandlePrepare;
-import com.heetian.spider.utils.TSTUtils;
 /**
  * 提交关键字查询   gjjbj/gjjQueryCreditAction!getBjQyList.dhtml
  * @author tst
@@ -54,6 +53,5 @@ public class CompanyURLProcess extends GuangXiProcessHandlePrepare{
 			}
 			page.addTargetRequest(builderRequest(url,Method.GET, regNumber,entName, null));
 		}
-		((TSTPageProcessor)task).setSeedSdP(uls.size());
 	}
 }

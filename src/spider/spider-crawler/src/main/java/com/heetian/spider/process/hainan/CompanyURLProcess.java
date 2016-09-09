@@ -3,15 +3,14 @@ package com.heetian.spider.process.hainan;
 import java.util.Iterator;
 import java.util.List;
 
+import com.heetian.spider.process.abstractclass.HaiNanProcessHandlePrepare;
+import com.heetian.spider.utils.TSTUtils;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.process.abstractclass.HaiNanProcessHandlePrepare;
-import com.heetian.spider.utils.TSTUtils;
 /**
  * 
  * @author tst
@@ -45,6 +44,5 @@ public class CompanyURLProcess extends HaiNanProcessHandlePrepare{
 				request.putExtra(Request.private_charset, "gb2312");
 			page.addTargetRequest(request);
 		}
-		((TSTPageProcessor)task).setSeedSdP(uls.size());
 	}
 }

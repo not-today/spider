@@ -1,6 +1,5 @@
 package com.heetian.spider.utils;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -8,8 +7,6 @@ import java.util.Map;
 
 import com.heetian.spider.component.SeedStatusEnum;
 import com.heetian.spider.dbcp.bean.Proxy;
-import com.heetian.spider.dbcp.bean.Seed;
-import com.heetian.spider.dbcp.bean.SeedMapping;
 
 public class BufferedSeed {
 	/**
@@ -30,7 +27,6 @@ public class BufferedSeed {
 	private int failNumber = 0;
 	private SeedStatusEnum status = SeedStatusEnum.update;
 	private Proxy proxy;
-	private Seed seed;
 	private SeedJsonBean origin;
 	
 	public SeedJsonBean getOrigin() {
@@ -41,9 +37,8 @@ public class BufferedSeed {
 		this.origin = origin;
 	}
 
-	public BufferedSeed(Seed seed) {
-		this.seed = seed;
-		this.seed.setSm(new SeedMapping());
+	public BufferedSeed(SeedJsonBean origin) {
+		this.origin = origin;
 	}
 	
 	public Map<String, BufferedGsgsRegister> getEnters() {
@@ -101,60 +96,10 @@ public class BufferedSeed {
 		}
 		return tmp;
 	}
-	
-	public String getUuid() {
-		return this.seed.getUuid();
+	public String getName(){
+		return this.origin.getSeed();
 	}
-
-	public void setUuid(String uuid) {
-		this.seed.setUuid(uuid);
-	}
-
-	public String getName() {
-		return this.seed.getName();
-	}
-
-	public void setName(String name) {
-		this.seed.setName(name);
-	}
-
-	public Timestamp getBegin() {
-		return this.seed.getSm().getBegin();
-	}
-
-	public void setBegin(Timestamp begin) {
-		this.seed.getSm().setBegin(begin);
-	}
-
-	public Timestamp getEnd() {
-		return this.seed.getSm().getEnd();
-	}
-
-	public void setEnd(Timestamp end) {
-		this.seed.getSm().setEnd(end);
-	}
-
-	public String getCode() {
-		return this.seed.getSm().getCode();
-	}
-
-	public void setCode(String code) {
-		this.seed.getSm().setCode(code);
-	}
-
-	public int getNumber() {
-		return this.seed.getSm().getNumber();
-	}
-
-	public void setNumber(int number) {
-		this.seed.getSm().setNumber(number);
-	}
-
-	public String getOver() {
-		return this.seed.getSm().getOver();
-	}
-
-	public void setOver(String over) {
-		this.seed.getSm().setOver(over);
+	public String getCode(){
+		return this.origin.getPvn();
 	}
 }

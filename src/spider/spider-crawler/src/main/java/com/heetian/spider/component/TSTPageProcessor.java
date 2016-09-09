@@ -1,6 +1,6 @@
 package com.heetian.spider.component;
 
-import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -9,14 +9,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.http.HttpHost;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.processor.PageProcessor;
 
 import com.google.gson.Gson;
 import com.heetian.spider.dbcp.bean.GsgsBranch;
@@ -27,18 +21,20 @@ import com.heetian.spider.dbcp.bean.GsgsShareholder;
 import com.heetian.spider.dbcp.bean.GsgsShareholderDetail;
 import com.heetian.spider.dbcp.bean.Proxy;
 import com.heetian.spider.dbcp.bean.ProxyStatus;
-import com.heetian.spider.dbcp.bean.PvnObj;
 import com.heetian.spider.dbcp.bean.QygsQynb;
-import com.heetian.spider.dbcp.utils.ConstantDBCP;
 import com.heetian.spider.observer.ErrorStatus;
 import com.heetian.spider.process.abstractclass.ProcessHandle;
 import com.heetian.spider.process.abstractclass.ProcessHandlePrepare;
 import com.heetian.spider.tools.SpiderUtils;
 import com.heetian.spider.utils.BufferedGsgsRegister;
 import com.heetian.spider.utils.BufferedSeed;
-import com.heetian.spider.utils.KafkaCfg;
 import com.heetian.spider.utils.KafkaProducer;
 import com.heetian.spider.utils.ProxyManager;
+
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.processor.PageProcessor;
 
 public class TSTPageProcessor implements PageProcessor {
 	private static Logger logger = LoggerFactory.getLogger(TSTPageProcessor.class);
@@ -47,9 +43,6 @@ public class TSTPageProcessor implements PageProcessor {
 	 */
 	private BufferedSeed seed;
 	private Site site = Site.me();
-	public String sendSigle(String isSucc){
-		return seed.getName()+"\n"+seed.getCode()+":"+isSucc;
-	}
 	public void setProxyStatus(ProxyStatus status){
 		Proxy proxy = this.seed.getProxy();
 		if(proxy!=null)
@@ -63,7 +56,7 @@ public class TSTPageProcessor implements PageProcessor {
 	 * @return
 	 */
 	public String getcode(){
-		return this.seed.getCode();
+		return seed.getCode();
 	}
 	/**
 	 * 需保证SBContainer对象内有值，不然出错
@@ -71,39 +64,7 @@ public class TSTPageProcessor implements PageProcessor {
 	 */
 	public TSTPageProcessor() {
 		super();
-		this.seed = SBContainer.remove();
-		//设置种子开始时间
-		this.seed.setBegin(new Timestamp(System.currentTimeMillis()));
 		initSite();
-		PvnObj pvnObj = ProxyManager.getProxyType(this.seed.getCode());
-		if(pvnObj==null){
-			logger.error("根据区域码获取代理编码等配置失败，而导致程序停止："+this.seed.getCode());
-			System.exit(0);
-		}
-		String type = pvnObj.getProxyType();
-		String charset = pvnObj.getCharset();
-		this.site.setCharset(charset);
-		if(ConstantDBCP.proxyType_stable.equals(type)){
-			if(SpiderComponentCFG.useFixedIP!=null&&SpiderComponentCFG.useFixedIP.size()>0){
-				HttpHost host = SpiderComponentCFG.useFixedIP.removeFirst();
-				this.site.setHttpProxy(host) ;
-				logger.info("创建一个带有稳定代理的pageprocessor:"+host);
-				SpiderComponentCFG.useFixedIP.addLast(host);
-			}else{
-				logger.warn("配置文件中，配置成使用固定代理，但是固定代理没有代理ip，请查看原因");
-			}
-		}else if(ConstantDBCP.proxyType_nostable.equals(type)){
-			Proxy proxy = ProxyManager.pollProxy(this.seed.getCode());
-			if(proxy==null){
-				logger.warn("从数据库获取代理失败，请查看原因");
-			}else{
-				this.seed.setProxy(proxy);
-				this.site.setHttpProxy(proxy.toConvertHttpHost()) ;
-				logger.info("创建一个带有不稳定代理的pageprocessor:"+proxy.toConvertHttpHost());
-			}
-		}else if(ConstantDBCP.proxyType_noprxy.equals(type)){
-			logger.info("创建一个不使用代理的pageprocessor");
-		}
 	}
 	public void initSite(){
 		site.setRetryTimes(SpiderComponentCFG.retryTimes)
@@ -295,27 +256,30 @@ public class TSTPageProcessor implements PageProcessor {
 	 * @param seeds
 	 */
 	public void destroyMyself(){
-		SeedStatusEnum status = seed.getStatus();
-		if(status==SeedStatusEnum.update){
-			KafkaProducer.sendSeedStatus(sendSigle(KafkaCfg.topic_seed_send_status_success));
-		}else if(status==SeedStatusEnum.dele){
-			KafkaProducer.sendSeedStatus(sendSigle(KafkaCfg.topic_seed_send_status_other));
-		}else if(status==SeedStatusEnum.reco){
-			if(seed.isFail()){
-				seed.setNumber(0);
-				seed.setStatus(SeedStatusEnum.update);
-				SBContainer.add(seed);
-				logger.info("recovery process seed and init seed flag-->name:"+seed.getName());
-				KafkaProducer.sendSeedStatus(sendSigle(KafkaCfg.topic_seed_send_status_fail1));
-			}else{
-				KafkaProducer.sendSeedStatus(sendSigle(KafkaCfg.topic_seed_send_status_fail0));
-				logger.info("don't process seed because more than a failure-->name:"+seed.getName());
-			}
+		switch(seed.getStatus()){
+			case update:
+				//操作
+				break;
+			case dele:
+				//操作
+				break;
+			case reco:
+				if(seed.isFail()){
+					seed.setStatus(SeedStatusEnum.update);
+					SBContainer.add(seed);
+					logger.debug("recovery process seed and init seed flag-->name:"+seed.getName());
+				}else{
+					logger.debug("don't process seed because more than a failure-->name:"+seed.getName());
+				}
+				break;
 		}
 		ProxyManager.updateProxy(this.getProxy(), this.seed.getCode());//更新代理状态，既将代理重新存入数据库中
-		processData();
+		seed.getOrigin().setResults(processData());
+		KafkaProducer.sendData(gson.toJson(seed.getOrigin()));
 	}
-	private void processData() {
+	private Gson gson = new Gson();
+	private List<GsgsRegister> processData() {
+		List<GsgsRegister> datatmps = new ArrayList<GsgsRegister>();
 		Map<String, BufferedGsgsRegister> enters = seed.getEnters();
 		Set<Entry<String, BufferedGsgsRegister>> keys = enters.entrySet();
 		Iterator<Entry<String, BufferedGsgsRegister>> iter = keys.iterator();
@@ -328,27 +292,12 @@ public class TSTPageProcessor implements PageProcessor {
 				continue;
 			}
 			//DBUtils.infoToData(buffGsgsRegister.getGsgsRegister(),seed.getName());
-			toSend(buffGsgsRegister.getGsgsRegister());
+			//toSend(buffGsgsRegister.getGsgsRegister());
+			datatmps.add(buffGsgsRegister.getGsgsRegister());
 			seed.addSucessReg(rgc);
 		}
 		seed.getEnters().clear();//初始化databean集合。既清空数据
-	}
-	public void toSend(GsgsRegister data){
-		String json = new Gson().toJson(data);
-		KafkaProducer.sendData(json);
-	}
-	/**
-	 * 设置seed的sdProvince字段
-	 */
-	public void setSeedSdP(int sdProvince){
-		this.seed.setNumber(sdProvince);
-	}
-	/**
-	 * 获取seed的sdprovince字段
-	 * @return
-	 */
-	public int getSeedSdP(){
-		return this.seed.getNumber();
+		return datatmps;
 	}
 	/**
 	 * 获得seed的name
@@ -356,6 +305,9 @@ public class TSTPageProcessor implements PageProcessor {
 	 */
 	public String getSeedNm(){
 		return seed.getName();
+	}
+	public String getProvince() {
+		return this.seed.getCode();
 	}
 	public void setStatus(SeedStatusEnum status){
 		seed.setStatus(status);
@@ -368,8 +320,5 @@ public class TSTPageProcessor implements PageProcessor {
 	}
 	public void setBufferedSeed(BufferedSeed bufferedSeed) {
 		this.seed = bufferedSeed;
-	}
-	public String getProvince() {
-		return this.seed.getCode();
 	}
 }

@@ -3,16 +3,15 @@ package com.heetian.spider.process.shandong;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
+import com.heetian.spider.process.abstractclass.ShanDongProcessHandlePrepare;
+import com.heetian.spider.utils.AnalysisForJson;
+import com.heetian.spider.utils.TSTUtils;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.google.gson.reflect.TypeToken;
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.process.abstractclass.ShanDongProcessHandlePrepare;
-import com.heetian.spider.utils.AnalysisForJson;
-import com.heetian.spider.utils.TSTUtils;
 /**
  * 
  * @author tst
@@ -103,6 +102,5 @@ public class CompanyURLDetailProcess extends ShanDongProcessHandlePrepare{
 			request.putExtra("encrpripid", encrpripid);
 			page.addTargetRequest(request);
 		}
-		((TSTPageProcessor)task).setSeedSdP(companys.size());
 	}
 }

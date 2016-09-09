@@ -3,14 +3,13 @@ package com.heetian.spider.process.henan;
 import java.util.Iterator;
 import java.util.List;
 
+import com.heetian.spider.process.abstractclass.HeNanProcessHandlePrepare;
+import com.heetian.spider.utils.TSTUtils;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.process.abstractclass.HeNanProcessHandlePrepare;
-import com.heetian.spider.utils.TSTUtils;
 /**
  * 
  * @author tst
@@ -54,6 +53,5 @@ public class CompanyURLProcess extends HeNanProcessHandlePrepare{
 			}
 			page.addTargetRequest(builderRequest(url,Method.GET, regNumber,entName, null));
 		}
-		((TSTPageProcessor)task).setSeedSdP(uls.size());
 	}
 }
