@@ -1,12 +1,12 @@
 package com.heetian.spider.utils;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import com.heetian.spider.component.SeedStatusEnum;
 import com.heetian.spider.dbcp.bean.Proxy;
+import com.heetian.spider.enumeration.SeedStatus;
 
 public class BufferedSeed {
 	/**
@@ -20,15 +20,22 @@ public class BufferedSeed {
 	/**
 	 * 存放关键字获取到的企业注册码，并且已经存入数据库。当一个种子失败但有部分数据已经入库，下一次种子重新抓取，已经入库的一部分数据在这个集合中能够找到
 	 */
-	private List<String> successRegs = new ArrayList<String>();
+	private Set<String> successRegs = new HashSet<String>();
+	private Set<String> errorRegs = new HashSet<String>();
+	
 	/**
 	 * 关键字失败多少次
 	 */
 	private int failNumber = 0;
-	private SeedStatusEnum status = SeedStatusEnum.update;
+	private SeedStatus status = SeedStatus.SUCESS;
 	private Proxy proxy;
 	private SeedJsonBean origin;
-	
+	public BufferedSeed() {
+	}
+	public BufferedSeed(SeedJsonBean origin) {
+		super();
+		this.origin = origin;
+	}
 	public SeedJsonBean getOrigin() {
 		return origin;
 	}
@@ -37,9 +44,7 @@ public class BufferedSeed {
 		this.origin = origin;
 	}
 
-	public BufferedSeed(SeedJsonBean origin) {
-		this.origin = origin;
-	}
+	
 	
 	public Map<String, BufferedGsgsRegister> getEnters() {
 		return enters;
@@ -56,8 +61,21 @@ public class BufferedSeed {
 	public void addSucessReg(String regnumber) {
 		if (regnumber == null || "".equals(regnumber))
 			return;
-		if (!isContainSucessReg(regnumber))
-			successRegs.add(regnumber);
+		successRegs.add(regnumber);
+	}
+	public void removeError(String regnumber){
+		if (regnumber == null || "".equals(regnumber))
+			return;
+		errorRegs.remove(regnumber);
+	}
+	public Set<String> getErrorRegs() {
+		return errorRegs;
+	}
+
+	public void addErrorRegs(String regnumber) {
+		if (regnumber == null || "".equals(regnumber))
+			return;
+			errorRegs.add(regnumber);
 	}
 
 	public boolean isContainSucessReg(String regnumber) {
@@ -77,14 +95,16 @@ public class BufferedSeed {
 			return false;
 	}
 
-	public SeedStatusEnum getStatus() {
+	public SeedStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(SeedStatusEnum status) {
+	public void setStatus(SeedStatus status) {
 		this.status = status;
 	}
-
+	public void initSeedStatus(){
+		setStatus(SeedStatus.SUCESS);
+	}
 	
 	public BufferedGsgsRegister getGsgsRegister(String rgc)throws IllegalArgumentException{
 		if(rgc==null||"".equals(rgc.trim()))

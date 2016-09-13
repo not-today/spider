@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 
-import com.heetian.spider.component.SeedStatusEnum;
 import com.heetian.spider.component.TSTPageProcessor;
 import com.heetian.spider.dbcp.bean.ProxyStatus;
+import com.heetian.spider.enumeration.SeedStatus;
 import com.heetian.spider.process.abstractclass.PekingProcessHandlePrepare;
 import com.heetian.spider.utils.TSTUtils;
 
@@ -33,7 +33,7 @@ public class CompanyURLProcess extends PekingProcessHandlePrepare{
 		TSTPageProcessor tst = (TSTPageProcessor) task;
 		if(context==null||context.contains("可能访问过于频繁或非正常访问")){
 			tst.setProxyStatus(ProxyStatus.NO);
-			tst.setStatus(SeedStatusEnum.reco);
+			tst.setStatus(SeedStatus.FAIL);
 			return;
 		}
 		List<String> params = page.getHtml().xpath("//div[@class='list']/ul/li/a/@onclick").regex("(\\s*\\w+\\s*\\()(.*)(\\).*)",2).replace("['\\s]", "").all();

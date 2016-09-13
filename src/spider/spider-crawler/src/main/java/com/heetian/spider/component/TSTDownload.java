@@ -18,6 +18,7 @@ import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.selector.PlainText;
 
+import com.heetian.spider.enumeration.SeedStatus;
 import com.heetian.spider.ocr.exception.ImageConverte;
 import com.heetian.spider.peking.strategy.IsSucess;
 import com.heetian.spider.peking.strategy.Recognized;
@@ -77,7 +78,7 @@ public class TSTDownload extends HttpClientDownloader {
 						page.addTargetRequest(reDownRequest);
 					}
 				}else{
-					((TSTPageProcessor)((Spider)task).getPageProcessor()).setStatus(SeedStatusEnum.reco);//当验证码为null的次数超过一定值时，回收此种子
+					((TSTPageProcessor)((Spider)task).getPageProcessor()).setStatus(SeedStatus.FAIL);//当验证码为null的次数超过一定值时，回收此种子
 				}
 				RecognizedContext.newInstance().updateCurrentError(IsSucess.FAIL, Integer.parseInt(results[1]), Long.parseLong(results[2]));
 				request.putExtra(ProcessHandlePrepare.isProcessPageProcess, ProcessHandlePrepare.isProcessPageProcess);

@@ -8,9 +8,9 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.google.gson.reflect.TypeToken;
-import com.heetian.spider.component.SeedStatusEnum;
 import com.heetian.spider.component.TSTPageProcessor;
 import com.heetian.spider.dbcp.bean.ProxyStatus;
+import com.heetian.spider.enumeration.SeedStatus;
 import com.heetian.spider.process.abstractclass.JiangSuProcessHandlePrepare;
 import com.heetian.spider.utils.AnalysisForJson;
 import com.heetian.spider.utils.TSTUtils;
@@ -44,7 +44,7 @@ public class CompanyURLProcess extends JiangSuProcessHandlePrepare{
 		CompanyURLs codeBeans = AnalysisForJson.jsonToObject(context, new TypeToken<CompanyURLs>(){});
 		TSTPageProcessor tst = (TSTPageProcessor) task;
 		if(codeBeans==null){
-			tst.setStatus(SeedStatusEnum.reco);
+			tst.setStatus(SeedStatus.FAIL);
 			logger.error(context);
 			return;
 		}
@@ -55,14 +55,14 @@ public class CompanyURLProcess extends JiangSuProcessHandlePrepare{
 		if(tip!=null&&!"".equals(tip)){
 			if(tip.contains("该IP在一天内超过了查询的限定次数")||tip.contains("该IP在一小时内超过了查询的限定次数")|| tip.contains("该IP在一个月内连续5次超过了查询的限定次数")){
 				tst.setProxyStatus(ProxyStatus.NO);
-				tst.setStatus(SeedStatusEnum.reco);
+				tst.setStatus(SeedStatus.FAIL);
 				logger.error(context);
 			}else if(tip.contains("验证码填写错误")){
 				String url = builderURL("/province/rand_img.jsp?type=7&temp="+System.currentTimeMillis(), task.getSite());
 				page.addTargetRequest(builderRequest(url, Method.GET, null, null, null));
 				page.addTargetRequest(rDate(3, task));
 			}else{
-				tst.setStatus(SeedStatusEnum.reco);
+				tst.setStatus(SeedStatus.FAIL);
 				logger.error("tip不为零的其他原因:"+context);
 			}
 			return;

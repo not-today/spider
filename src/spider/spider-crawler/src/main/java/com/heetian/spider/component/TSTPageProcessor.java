@@ -22,6 +22,7 @@ import com.heetian.spider.dbcp.bean.GsgsShareholderDetail;
 import com.heetian.spider.dbcp.bean.Proxy;
 import com.heetian.spider.dbcp.bean.ProxyStatus;
 import com.heetian.spider.dbcp.bean.QygsQynb;
+import com.heetian.spider.enumeration.SeedStatus;
 import com.heetian.spider.observer.ErrorStatus;
 import com.heetian.spider.process.abstractclass.ProcessHandle;
 import com.heetian.spider.process.abstractclass.ProcessHandlePrepare;
@@ -30,6 +31,7 @@ import com.heetian.spider.utils.BufferedGsgsRegister;
 import com.heetian.spider.utils.BufferedSeed;
 import com.heetian.spider.utils.KafkaProducer;
 import com.heetian.spider.utils.ProxyManager;
+import com.heetian.spider.utils.SeedJsonBean;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -105,7 +107,7 @@ public class TSTPageProcessor implements PageProcessor {
 				handleResponse.analyticalPretreatmentProcess(page,this);
 				afterAnalyticalProcess(handleResponse, processName, request);
 			}catch(Exception e){
-				this.setStatus(SeedStatusEnum.reco);//设置种子的类型为内存回收
+				this.setStatus(SeedStatus.FAIL);//设置种子的类型为内存回收
 				setDataStatusForFail((String)page.getRequest().getExtra(ProcessHandle.REGNUMBER));
 				logger.error("["+seed.getName()+"]页面解析出现异常在call中;错误如下：",e);
 			}finally{
@@ -256,48 +258,61 @@ public class TSTPageProcessor implements PageProcessor {
 	 * @param seeds
 	 */
 	public void destroyMyself(){
+		clearErrorData();//清洗错误数据
 		switch(seed.getStatus()){
-			case update:
-				//操作
+			case SUCESS:
+				send();
 				break;
-			case dele:
-				//操作
-				break;
-			case reco:
+			case FAIL:
 				if(seed.isFail()){
-					seed.setStatus(SeedStatusEnum.update);
+					seed.initSeedStatus();
 					SBContainer.add(seed);
 					logger.debug("recovery process seed and init seed flag-->name:"+seed.getName());
-				}else{
+				}else{//种子失效，将种子丢失，并且发送成功的企业数据
+					send();
 					logger.debug("don't process seed because more than a failure-->name:"+seed.getName());
 				}
 				break;
 		}
 		ProxyManager.updateProxy(this.getProxy(), this.seed.getCode());//更新代理状态，既将代理重新存入数据库中
-		seed.getOrigin().setResults(processData());
-		KafkaProducer.sendData(gson.toJson(seed.getOrigin()));
+	}
+	private void send() {
+		SeedJsonBean bean = seed.getOrigin();
+		bean.setResults(processData());
+		KafkaProducer.sendData(gson.toJson(bean));
 	}
 	private Gson gson = new Gson();
 	private List<GsgsRegister> processData() {
 		List<GsgsRegister> datatmps = new ArrayList<GsgsRegister>();
+		Iterator<Entry<String, BufferedGsgsRegister>> iter = seed.getEnters().entrySet().iterator();
+		while(iter.hasNext())
+			datatmps.add(iter.next().getValue().getGsgsRegister());
+		return datatmps;
+	}
+	private void clearErrorData() {
 		Map<String, BufferedGsgsRegister> enters = seed.getEnters();
 		Set<Entry<String, BufferedGsgsRegister>> keys = enters.entrySet();
 		Iterator<Entry<String, BufferedGsgsRegister>> iter = keys.iterator();
 		while(iter.hasNext()){
 			Entry<String, BufferedGsgsRegister> entry = iter.next();
 			String rgc = entry.getKey();
-			BufferedGsgsRegister buffGsgsRegister = entry.getValue();
-			if(buffGsgsRegister.getStatus()==ProxyStatus.NO){
-				logger.info("databean:["+rgc+"]"+":是空数据或者状态为0;{"+buffGsgsRegister.getGsgsRegister()+"}");
-				continue;
+			BufferedGsgsRegister value = entry.getValue();
+			if(value.getStatus()==ProxyStatus.NO){
+				seed.addErrorRegs(rgc);
+				logger.info("databean:["+rgc+"]"+":是空数据或者状态为0;{"+value.getGsgsRegister()+"}");
+				iter.remove();
+			}else if(value.getStatus()==ProxyStatus.YSE){
+				seed.addSucessReg(rgc);
+				seed.removeError(rgc);
 			}
-			//DBUtils.infoToData(buffGsgsRegister.getGsgsRegister(),seed.getName());
-			//toSend(buffGsgsRegister.getGsgsRegister());
-			datatmps.add(buffGsgsRegister.getGsgsRegister());
-			seed.addSucessReg(rgc);
 		}
-		seed.getEnters().clear();//初始化databean集合。既清空数据
-		return datatmps;
+	}
+	
+	public BufferedSeed getSeed() {
+		return seed;
+	}
+	public void setSeed(BufferedSeed seed) {
+		this.seed = seed;
 	}
 	/**
 	 * 获得seed的name
@@ -309,10 +324,10 @@ public class TSTPageProcessor implements PageProcessor {
 	public String getProvince() {
 		return this.seed.getCode();
 	}
-	public void setStatus(SeedStatusEnum status){
+	public void setStatus(SeedStatus status){
 		seed.setStatus(status);
 	}
-	public SeedStatusEnum getStatus(){
+	public SeedStatus getStatus(){
 		return seed.getStatus();
 	}
 	public BufferedSeed getBufferedSeed() {

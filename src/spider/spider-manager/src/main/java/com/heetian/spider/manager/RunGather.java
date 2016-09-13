@@ -12,7 +12,10 @@ import com.heetian.spider.component.SBContainer;
 import com.heetian.spider.component.SpiderManagerFactory;
 import com.heetian.spider.component.SpiderManagerInter;
 import com.heetian.spider.tools.ReadConfig;
+import com.heetian.spider.utils.BufferedSeed;
 import com.heetian.spider.utils.KafkaConsumer;
+import com.heetian.spider.utils.PvnCode;
+import com.heetian.spider.utils.SeedJsonBean;
 
 public class RunGather implements Runnable{
 	//29个基本html的
@@ -36,6 +39,7 @@ public class RunGather implements Runnable{
 	private static Logger logger = LoggerFactory.getLogger(RunGather.class);
 	private static SpiderManagerInter spiderManager = SpiderManagerFactory.newInstance().createSpiderManager();
 	static{
+		test();//测试
 		BufferedReader reader = null;
 		try {
 			System.setProperty("javax.net.ssl.trustStore", ReadConfig.getCfgPath("jssecacerts"));
@@ -72,5 +76,12 @@ public class RunGather implements Runnable{
 		new Thread(new RunGather()).start();//开启爬虫线程
 		//new Thread(new AcceptSeed()).start();//开启种子接受线程
 		KafkaConsumer.startKafkaConsumer();
+	}
+	public static void test(){
+		SeedJsonBean msg = new SeedJsonBean();
+		msg.setPvn(PvnCode.code_chongqing);
+		msg.setSeed("科技有限公司");
+		BufferedSeed seed = new BufferedSeed(msg);
+		SBContainer.add(seed);
 	}
 }

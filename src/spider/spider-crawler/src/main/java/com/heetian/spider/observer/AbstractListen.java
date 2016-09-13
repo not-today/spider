@@ -4,17 +4,17 @@ import org.apache.http.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.heetian.spider.component.TSTPageProcessor;
+import com.heetian.spider.dbcp.bean.ProxyStatus;
+import com.heetian.spider.enumeration.SeedStatus;
+import com.heetian.spider.process.abstractclass.ProcessHandle;
+import com.heetian.spider.process.abstractclass.ProcessHandlePrepare;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.SeedStatusEnum;
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.dbcp.bean.ProxyStatus;
-import com.heetian.spider.process.abstractclass.ProcessHandle;
-import com.heetian.spider.process.abstractclass.ProcessHandlePrepare;
 
 public abstract class AbstractListen implements ErrorStatus{
 	protected static final String PROTECTOL = "http://";
@@ -65,7 +65,7 @@ public abstract class AbstractListen implements ErrorStatus{
 			+ "url["+page.getRequest().getUrl()+"]"
 			+"proxy["+tst.getSite().getHttpProxy()+"]");
 		tst.setProxyStatus(ProxyStatus.NO);//对代理进行处理
-		tst.setStatus(SeedStatusEnum.reco);//设置种子的类型为内存回收
+		tst.setStatus(SeedStatus.FAIL);//设置种子的类型为内存回收
 		//失败请求，若注册码存在则设置数据对象的状态为0，即废弃该对应的注册码数据
 		tst.setDataStatusForFail((String) page.getRequest().getExtra(ProcessHandle.REGNUMBER));
 	}

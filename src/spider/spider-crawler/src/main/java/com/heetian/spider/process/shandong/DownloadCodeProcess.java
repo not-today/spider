@@ -3,18 +3,18 @@ package com.heetian.spider.process.shandong;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.heetian.spider.component.TSTPageProcessor;
+import com.heetian.spider.enumeration.SeedStatus;
+import com.heetian.spider.peking.strategy.RecognizedContext;
+import com.heetian.spider.process.abstractclass.KeyPoint_CODE;
+import com.heetian.spider.process.abstractclass.ShanDongProcessHandlePrepare;
+import com.heetian.spider.utils.TSTUtils;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.utils.HttpConstant.Method;
-
-import com.heetian.spider.component.SeedStatusEnum;
-import com.heetian.spider.component.TSTPageProcessor;
-import com.heetian.spider.peking.strategy.RecognizedContext;
-import com.heetian.spider.process.abstractclass.KeyPoint_CODE;
-import com.heetian.spider.process.abstractclass.ShanDongProcessHandlePrepare;
-import com.heetian.spider.utils.TSTUtils;
 /**
  * 
  * @author tst
@@ -41,7 +41,7 @@ public class DownloadCodeProcess extends ShanDongProcessHandlePrepare implements
 			page.addTargetRequest(request);
 			return;
 		}else{
-			((TSTPageProcessor)task).setStatus(SeedStatusEnum.reco);//当验证码请求超过一定次数。回收种子
+			((TSTPageProcessor)task).setStatus(SeedStatus.FAIL);//当验证码请求超过一定次数。回收种子
 		}
 	}
 	@Override

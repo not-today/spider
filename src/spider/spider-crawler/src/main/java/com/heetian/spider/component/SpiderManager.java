@@ -30,6 +30,7 @@ public class SpiderManager implements SpiderManagerInter{
 		TSTPageProcessor page = new TSTPageProcessor();
 		Site site = page.getSite();
 		BufferedSeed seed = SBContainer.remove();
+		page.setSeed(seed);
 		PvnObj pvnObj = ProxyManager.getProxyType(seed.getCode());
 		if(pvnObj==null){
 			logger.error("根据区域码获取代理编码等配置失败，而导致程序停止："+seed.getCode());

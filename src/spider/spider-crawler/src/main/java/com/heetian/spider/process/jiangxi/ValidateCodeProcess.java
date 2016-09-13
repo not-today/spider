@@ -3,16 +3,16 @@ package com.heetian.spider.process.jiangxi;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.processor.PageProcessor;
-
-import com.heetian.spider.component.SeedStatusEnum;
 import com.heetian.spider.component.TSTPageProcessor;
 import com.heetian.spider.dbcp.bean.ProxyStatus;
+import com.heetian.spider.enumeration.SeedStatus;
 import com.heetian.spider.peking.strategy.IsSucess;
 import com.heetian.spider.peking.strategy.RecognizedContext;
 import com.heetian.spider.process.abstractclass.JiangXiProcessHandlePrepare;
 import com.heetian.spider.tools.MD5Util;
+
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.processor.PageProcessor;
 /**
  * 
  * @author tst
@@ -30,7 +30,7 @@ public class ValidateCodeProcess extends JiangXiProcessHandlePrepare {
 		TSTPageProcessor tst = (TSTPageProcessor) task;
 		if(json==null||json.contains("操作过于频繁，请稍后再访问")){
 			tst.setProxyStatus(ProxyStatus.NO);
-			tst.setStatus(SeedStatusEnum.reco);
+			tst.setStatus(SeedStatus.FAIL);
 			return;
 		}
 		String results[] = (String[]) page.getRequest().getExtra(RecognizedContext.saveName);

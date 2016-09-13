@@ -5,10 +5,10 @@
 
     <!--Cluster name to connect-->
     <group>
-        <name>qysudu_mmdb</name>
-        <password>mmdb_pwd</password>
-        <!-- <name>wifi_Test</name>
-        <password>wifi_Test</password> -->
+       <!--  <name>qysudu_mmdb</name>
+        <password>mmdb_pwd</password> -->
+        <name>wifi_Test</name>
+        <password>wifi_Test</password>
     </group>
 
     <!--client properties
@@ -20,9 +20,9 @@
     <!--Network configuration details-->
     <network>
         <cluster-members>
-           <!--  <address>192.168.199.56</address>
-            <address>192.168.199.58</address> -->
-            <address>192.168.99.71</address>
+            <address>192.168.199.56</address>
+            <address>192.168.199.58</address>
+            <!-- <address>192.168.99.71</address> -->
         </cluster-members>
     </network>
 
