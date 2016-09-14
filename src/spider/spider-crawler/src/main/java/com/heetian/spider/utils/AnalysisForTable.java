@@ -677,6 +677,8 @@ public class AnalysisForTable {
 	private static void toRegBean(GsgsRegister gsgsRegister,String key,String value) {
 		if(key==null||"".equals(key.trim()))
 			return;
+		if(value==null||"".equals(value.trim()))
+			return;
 		if (key.contains("注册号")||key.contains("统一社会信用代码")){
 			gsgsRegister.setRgc(value);
 		if(CheckUtils.checkCreditCode(value))
